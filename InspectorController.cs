@@ -30,10 +30,12 @@ namespace BVNetwork.ContentAreaInspector
         {
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
             var content = contentLoader.Get<IContent>(new ContentReference(id));
+            var status = EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + (content as IVersionable)?.Status.ToString().ToLower());
             var currentItem = new InspectorContentViewModel()
             {
+               
                 Name = content.Name,
-                Status = (content as IVersionable).Status.ToString(),
+                Status = status,
                 Type = content.GetOriginalType().Name
             };                   
             currentItem.EditUrl = PageEditing.GetEditUrl(content.ContentLink);

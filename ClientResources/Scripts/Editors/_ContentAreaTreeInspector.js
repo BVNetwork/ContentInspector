@@ -8,7 +8,7 @@
         "dojo/on",
         "dojo/dom",
         "dijit/popup",
-        "dijit/TooltipDialog",
+        "dijit/Dialog",
         "epi/epi",
         "epi/dependency",
         "epi-cms/contentediting/editors/_ContentAreaTree"
@@ -40,6 +40,7 @@
             },
 
             _modifyNode: function (node, model) {
+                console.log(model);
                 // locate default icon
                
                 var imgNode = query("img.dijitIcon", node.domNode);
@@ -122,6 +123,7 @@
                 };
                
                 node.imageTooltip = new TooltipDialog({
+                    title: content.name,
                     connectId: [node.id],
                    // content:'<a id="close-dialog" href="#">Close</a>' +  createHtml(),
                   //  content:createHtml(),
@@ -134,22 +136,23 @@
                     //        });
                     //},
                     onMouseLeave: function () {
-                         //   popup.close(node.imageTooltip);
+                            popup.close(node.imageTooltip);
                     }
                 });
 
              
                 on(imgNode, 'click', function () {
                     node.imageTooltip.set("content", createHtml()),
-                    popup.open({
-                        popup: node.imageTooltip,
-                      //  content: createHtml(),
-                        //around: dom.byId(node.id),
-                        //orient: ["above-centered"],
-                        around: dom.byId(node.id),
-                        orient: ["after-centered"],
-                        onCancel: function () { popup.close(node.imageTooltip); }
-                    });
+                        node.imageTooltip.show();
+                    //popup.open({
+                    //    popup: node.imageTooltip,
+                    //  //  content: createHtml(),
+                    //    //around: dom.byId(node.id),
+                    //    //orient: ["above-centered"],
+                    //    //around: dom.byId(node.id),
+                    //    //orient: ["after-centered"],
+                    //    //onCancel: function () { popup.close(node.imageTooltip); }
+                    //});
                 });
             }
         });

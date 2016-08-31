@@ -10,6 +10,7 @@
 
 .inspector img {
     float: left;
+    margin-left: 1px;
 }
 
 .inspector_block {
@@ -27,13 +28,11 @@
 
 
 .inspector_container {
-    overflow-y: scroll;
+    /*overflow-y: scroll;
     overflow-x: hidden;
     max-height: 700px;
-    min-width: 300px;
+    min-width: 300px;*/
     padding-right: 10px;
-    
-    
 }
 
 .inspector_green {

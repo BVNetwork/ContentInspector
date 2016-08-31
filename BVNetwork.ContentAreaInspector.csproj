@@ -166,8 +166,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientResources\Scripts\Commands\Inspect.js" />
+    <Content Include="ClientResources\Scripts\ContentAreaCommands.js" />
     <Content Include="ClientResources\Scripts\Editors\ContentAreaInspector.js" />
     <Content Include="ClientResources\Scripts\Editors\_ContentAreaTreeInspector.js" />
+    <Content Include="ClientResources\Scripts\Initializer.js" />
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
   </ItemGroup>
   <ItemGroup>
