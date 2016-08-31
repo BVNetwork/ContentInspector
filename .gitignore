@@ -2,3 +2,6 @@
 ## EPiServer Files
 ######################
 *License.config
+packages/
+obj/
+.vs/config/applicationhost.config

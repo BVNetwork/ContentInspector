@@ -1,0 +1,86 @@
+﻿@using BVNetwork.ContentAreaInspector
+@model BVNetwork.ContentAreaInspector.ContentAreaInspectorViewModel
+
+
+@{
+
+}
+@{
+    ViewBag.Title = "title";
+    Layout = null;
+}
+<div class="inspector_container">
+    <strong class="inspector_heading">@Model.Content.Name</strong>
+    <ul class="inspector">
+        @RenderContentArea(Model.ContentAreaItems)
+    </ul>
+</div>
+
+
+@helper RenderContentArea(List<ContentAreaItemViewModel> items)
+{
+
+
+foreach (var item in items)
+{
+        <li>
+            <i> @item.Name</i> <text> items:</text>
+            <div class="inspector_content_area">
+                <div>
+                    @foreach (var subItem in item.ContentAreaItems)
+                    {
+                        @RenderContent(subItem);
+                    }
+
+                </div>
+            </div>
+        </li>
+}
+}
+
+
+@helper RenderContent(ContentAreaInspectorViewModel inspectorViewModel)
+{
+    <ul class="inspector">
+        @if (inspectorViewModel.VisitorGroupsNames != null && inspectorViewModel.VisitorGroupsNames.Any())
+        {
+            <li class="inspector_green">
+                <i>
+
+                    <span class="epi-iconUsers dijitFolderOpened inspector_visitor_group"></span>
+                    <span class="inspector_black">Visible for:</span>
+                    @for (int i = 0; i < inspectorViewModel.VisitorGroupsNames.Count; i++)
+                    {
+                        var visitorGroup = inspectorViewModel.VisitorGroupsNames[i];@visitorGroup
+                        if (i != inspectorViewModel.VisitorGroupsNames.Count - 1)
+                        {
+                            <span class="inspector_black">and</span>
+                        }
+                    }
+                </i>
+            </li>
+        }
+        @if (inspectorViewModel.Content.MainType == MainContentType.Image)
+        {
+            <img width="48" height="48" src="@inspectorViewModel.Content.PreviewUrl" />
+        }
+        else if (inspectorViewModel.Content.MainType == MainContentType.Block)
+        {
+            <span class="epi-iconObjectSharedBlock epi-icon--large inspector_block"></span>
+        }
+        else if (inspectorViewModel.Content.MainType == MainContentType.Page)
+        {
+            <span class="epi-iconObjectPage epi-icon--large inspector_block"></span>
+        }
+
+
+        <li><b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a></li>
+        <li>Type: @inspectorViewModel.Content.Type</li>
+        <li>Status: @inspectorViewModel.Content.Type</li>
+
+        @RenderContentArea(inspectorViewModel.ContentAreaItems)
+
+
+
+    </ul>
+}
