@@ -1,10 +1,5 @@
 ﻿@using BVNetwork.ContentAreaInspector
 @model BVNetwork.ContentAreaInspector.ContentAreaInspectorViewModel
-
-
-@{
-
-}
 @{
     ViewBag.Title = "title";
     Layout = null;
@@ -17,25 +12,23 @@
 </div>
 
 
-@helper RenderContentArea(List<ContentAreaItemViewModel> items)
+@helper RenderContentArea(List<ContentAreaInspectorViewModel.ContentAreaItemViewModel> items)
 {
+    foreach (var item in items)
+    {
+            <li>
+                <i> @item.Name</i> <text> items:</text>
+                <div class="inspector_content_area">
+                    <div>
+                        @foreach (var subItem in item.ContentAreaItems)
+                        {
+                            @RenderContent(subItem);
+                        }
 
-
-foreach (var item in items)
-{
-        <li>
-            <i> @item.Name</i> <text> items:</text>
-            <div class="inspector_content_area">
-                <div>
-                    @foreach (var subItem in item.ContentAreaItems)
-                    {
-                        @RenderContent(subItem);
-                    }
-
+                    </div>
                 </div>
-            </div>
-        </li>
-}
+            </li>
+    }
 }
 
 
@@ -72,15 +65,10 @@ foreach (var item in items)
         {
             <span class="epi-iconObjectPage epi-icon--large inspector_block"></span>
         }
-
-
         <li><b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a></li>
         <li>Type: @inspectorViewModel.Content.Type</li>
         <li>Status: @inspectorViewModel.Content.Type</li>
 
         @RenderContentArea(inspectorViewModel.ContentAreaItems)
-
-
-
     </ul>
 }

@@ -161,6 +161,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ContentAreaInspectorViewModel.cs" />
     <Compile Include="Initialization.cs" />
     <Compile Include="InspectorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
