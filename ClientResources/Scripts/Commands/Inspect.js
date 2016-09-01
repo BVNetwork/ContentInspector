@@ -11,7 +11,7 @@
     "epi-cms/contentediting/command/_ContentAreaCommand",
     "epi-cms/contentediting/ContentActionSupport",
     "epi/i18n!epi/cms/nls/episerver.shared.action"
-], function (declare, lang, topic, when, TooltipDialog, epi, dependency, _ContentAreaCommand, ContentActionSupport, actionStrings) {
+], function (declare, lang, topic, when, Dialog, epi, dependency, _ContentAreaCommand, ContentActionSupport, actionStrings) {
 
     return declare([_ContentAreaCommand], {
         name: "Inspect",
@@ -38,26 +38,14 @@
 
         _createTooltip: function () {
             var that = this;
-            var createHtml = function () {
-
-                var result = null;
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: "/contentareainspector/" + that.model.contentLink,
-                    success: function (data) {
-                        result = data;
-                    }
-                });
-                return result;
-            };
-
-            var dialog = new TooltipDialog({
+            var dialog = new Dialog({
                 title: that.model.name,
-                content: createHtml()
+                style: "min-width:400px;",
+                class:"inspector_dialog",
+                
+                href: "/contentareainspector/" + that.model.contentLink
             });
             dialog.show();
-
         },
 
         _onModelValueChange: function () {
