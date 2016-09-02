@@ -40,9 +40,8 @@
             var that = this;
             var dialog = new Dialog({
                 title: that.model.name,
-                style: "min-width:400px;",
-                class:"inspector_dialog",
-                
+                style: "min-width:600px;",
+                class:"inspector_dialog",          
                 href: "/contentareainspector/" + that.model.contentLink
             });
             dialog.show();

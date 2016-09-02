@@ -172,6 +172,7 @@
     <Content Include="ClientResources\Scripts\Editors\ContentAreaInspector.js" />
     <Content Include="ClientResources\Scripts\Editors\_ContentAreaTreeInspector.js" />
     <Content Include="ClientResources\Scripts\Initializer.js" />
+    <Content Include="ClientResources\Scripts\rasterizeHTML.allinone.js" />
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
   </ItemGroup>
   <ItemGroup>

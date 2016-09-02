@@ -4,51 +4,86 @@
     ViewBag.Title = "title";
     Layout = null;
 }
+<canvas id="canvas" width="1000px" height="100px" style="border: 1px solid black;"></canvas>
+
 <div class="inspector_container">
-    <strong class="inspector_heading">@Model.Content.Name</strong>
+    <div class="inspector_main">
+        <ul>
+            <li>Type: @Model.Content.Type</li>
+            <li>Status: @Model.Content.Status</li>
+        </ul>
+    </div>
     <ul class="inspector">
         @RenderContentArea(Model.ContentAreaItems)
+        @if (Model.ContentReferenceItems != null && Model.ContentReferenceItems.Any())
+        {
+            foreach (var contentReference in Model.ContentReferenceItems)
+            {
+                @RenderContent(contentReference.ContentReferenceItem, null)
+            }
+        }
     </ul>
 </div>
 
 
 @helper RenderContentArea(List<ContentAreaInspectorViewModel.ContentAreaItemViewModel> items)
 {
-    foreach (var item in items)
-    {
-            <li>
-                <i> @item.Name</i> <text> items:</text>
-                <div class="inspector_content_area">
-                    <div>
-                        @foreach (var subItem in item.ContentAreaItems)
+var previousContentGroup = "";
+foreach (var item in items)
+{
+        <li class="inspector_area">
+            <div class="inspector_property">[Content area]<i> @item.Name</i> <text> value:</text></div>
+            <div class="inspector_content_area">
+                <div>
+                    @foreach (var subItem in item.ContentAreaItems)
+                    {
+                        @RenderContent(subItem, previousContentGroup)
                         {
-                            @RenderContent(subItem);
+                            previousContentGroup = subItem.ContentGroup;
                         }
+                    }
 
-                    </div>
                 </div>
-            </li>
-    }
+            </div>
+        </li>
+}
 }
 
 
-@helper RenderContent(ContentAreaInspectorViewModel inspectorViewModel)
+@helper RenderContent(ContentAreaInspectorViewModel inspectorViewModel, string previousContentGroup)
 {
+if (!string.IsNullOrEmpty(previousContentGroup) && string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
+{
+        @:</div>
+}
+if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
+{
+
+        @:<div class="inspector_group">
+     }
     <ul class="inspector">
-        @if (inspectorViewModel.VisitorGroupsNames != null && inspectorViewModel.VisitorGroupsNames.Any())
+        @if (!string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
         {
             <li class="inspector_green">
                 <i>
-
                     <span class="epi-iconUsers dijitFolderOpened inspector_visitor_group"></span>
                     <span class="inspector_black">Visible for:</span>
-                    @for (int i = 0; i < inspectorViewModel.VisitorGroupsNames.Count; i++)
+                    @if (inspectorViewModel.VisitorGroupsNames != null && inspectorViewModel.VisitorGroupsNames.Any())
                     {
-                        var visitorGroup = inspectorViewModel.VisitorGroupsNames[i];@visitorGroup
-                        if (i != inspectorViewModel.VisitorGroupsNames.Count - 1)
+
+                        for (int i = 0; i < inspectorViewModel.VisitorGroupsNames.Count; i++)
                         {
-                            <span class="inspector_black">and</span>
+                            var visitorGroup = inspectorViewModel.VisitorGroupsNames[i];
+                            @visitorGroup
+                            if (i != inspectorViewModel.VisitorGroupsNames.Count - 1)
+                            {
+                                <span class="inspector_black">and</span>
+                            }
                         }
+                    }
+                    else
+                    {
+                        <text>Everyone else </text>
                     }
                 </i>
             </li>
@@ -66,9 +101,28 @@
             <span class="epi-iconObjectPage epi-icon--large inspector_block"></span>
         }
         <li><b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a></li>
+        <li>
+            <button data-dojo-type="dijit/form/Button" data-dojo-id="myToggleButton" onClick="rasterizeHTML.drawHTML('<h1>hello<h2>',document.getElementById('canvas'))" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconCut'" type="button">
+                Click me!
+            </button>
+        </li>
         <li>Type: @inspectorViewModel.Content.Type</li>
-        <li>Status: @inspectorViewModel.Content.Type</li>
+        <li>Status: @inspectorViewModel.Content.Status</li>
 
         @RenderContentArea(inspectorViewModel.ContentAreaItems)
+        @if (inspectorViewModel.ContentReferenceItems != null && inspectorViewModel.ContentReferenceItems.Any())
+        {
+            foreach (var contentReferenceViewModel in inspectorViewModel.ContentReferenceItems)
+            {
+                <li>
+                    <div class="inspector_property">
+                        [Content reference]<i> @contentReferenceViewModel.Name</i> value:
+                        @RenderContent(contentReferenceViewModel.ContentReferenceItem, null)
+                        </div>
+</li>
+            }
+        }
     </ul>
+
+
 }

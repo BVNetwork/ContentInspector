@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Cms.Shell;
@@ -18,31 +19,32 @@ namespace BVNetwork.ContentAreaInspector
     {
         public ActionResult Index(int id)
         {
-            var model = CreateModel(id, null);
+            //Thread.Sleep(3000);
+            var model = CreateModel(id, null, null);
             //return View(Paths.ToResource(this.GetType(),
             //    "Views/ContentAreaInspector/Index.cshtml"), model);
             return View(Paths.PublicRootPath + "_ContentAreaInspector/Views/ContentAreaInspector/Index.cshtml", model);
         }
 
-        private ContentAreaInspectorViewModel CreateModel(int id, List<string> visitorGroupNames)
+        private ContentAreaInspectorViewModel CreateModel(int id, List<string> visitorGroupNames, string contentGroup)
         {
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
             var content = contentLoader.Get<IContent>(new ContentReference(id));
             var status = EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + (content as IVersionable)?.Status.ToString().ToLower());
             var currentItem = new ContentAreaInspectorViewModel.InspectorContentViewModel()
             {
-               
+
                 Name = content.Name,
                 Status = status,
                 Type = content.GetOriginalType().Name
-            };                   
+            };
             currentItem.EditUrl = PageEditing.GetEditUrl(content.ContentLink);
             if (content is ImageData)
-            { 
+            {
                 currentItem.MainType = MainContentType.Image;
                 currentItem.PreviewUrl = content.ThumbnailUrl();
             }
-            else if(content is BlockData)
+            else if (content is BlockData)
                 currentItem.MainType = MainContentType.Block;
             else
                 currentItem.MainType = MainContentType.Page;
@@ -51,9 +53,13 @@ namespace BVNetwork.ContentAreaInspector
             {
                 Content = currentItem,
                 VisitorGroupsNames = visitorGroupNames,
-                ContentAreaItems = new List<ContentAreaInspectorViewModel.ContentAreaItemViewModel>()
+                ContentAreaItems = new List<ContentAreaInspectorViewModel.ContentAreaItemViewModel>(),
+                ContentGroup = contentGroup,
+                ContentReferenceItems = new List<ContentAreaInspectorViewModel.ContentReferenceViewModel>()
             };
             var contentType = ServiceLocator.Current.GetInstance<IContentTypeRepository>().Load(content.ContentTypeID);
+
+            // Get content area properties
             foreach (var prop in contentType.PropertyDefinitions.Where(x => x.Type.Name == "ContentArea"))
             {
                 var nestedContentArea = content.Property[prop.Name] as PropertyContentArea;
@@ -66,16 +72,36 @@ namespace BVNetwork.ContentAreaInspector
                     };
                     var contentArea = (nestedContentArea.Value as ContentArea);
                     for (int i = 0; i < (nestedContentArea.Value as ContentArea).Count; i++)
-                    {                       
-                        var contentAreaItem = contentArea.Items[i];                        
+                    {
+                        var contentAreaItem = contentArea.Items[i];
                         var internalFormat = contentArea.Fragments[i].InternalFormat;
                         var visitorGroups = GetVisitorGroupNames(internalFormat);
+
                         contentAreaViewModel.ContentAreaItems.Add(CreateModel(contentAreaItem.ContentLink.ID,
-                            visitorGroups));
-                        
+                            visitorGroups, contentAreaItem.ContentGroup));
+
                     }
                     model.ContentAreaItems.Add(contentAreaViewModel);
                 }
+            }
+
+            // Get content reference properties
+            foreach (var prop in contentType.PropertyDefinitions.Where(x => x.Type.Name == "ContentReference"))
+            {
+                var contentReferenceProperty = content.Property[prop.Name] as PropertyContentReference;
+                var contentReference = contentReferenceProperty?.Value as ContentReference;
+                if (contentReference != null)
+                {
+                    var contentReferenceItem = CreateModel(contentReference.ID, null, null);
+
+                    var contentReferenceViewModel = new ContentAreaInspectorViewModel.ContentReferenceViewModel()
+                    {
+                        Name = prop.TranslateDisplayName() ?? prop.Name,
+                        ContentReferenceItem = contentReferenceItem
+                    };
+                    model.ContentReferenceItems.Add(contentReferenceViewModel);
+                }
+               
             }
             return model;
         }
@@ -108,6 +134,6 @@ namespace BVNetwork.ContentAreaInspector
         Block,
         Image,
         Page
-            
+
     }
 }

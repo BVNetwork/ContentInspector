@@ -6,7 +6,9 @@ namespace BVNetwork.ContentAreaInspector
     {
         public InspectorContentViewModel Content { get; set; }
         public List<string> VisitorGroupsNames { get; set; }
+        public string ContentGroup { get; set; }
         public List<ContentAreaItemViewModel> ContentAreaItems { get; set; }
+        public List<ContentReferenceViewModel> ContentReferenceItems { get; set; }
 
         public class InspectorContentViewModel
         {
@@ -23,6 +25,13 @@ namespace BVNetwork.ContentAreaInspector
         {
             public string Name { get; set; }
             public List<ContentAreaInspectorViewModel> ContentAreaItems { get; set; }
+        }
+
+
+        public class ContentReferenceViewModel
+        {
+            public string Name { get; set; }
+            public ContentAreaInspectorViewModel ContentReferenceItem { get; set; }
         }
     }
 

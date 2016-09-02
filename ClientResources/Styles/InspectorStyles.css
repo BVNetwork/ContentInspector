@@ -33,6 +33,8 @@
     max-height: 700px;
     min-width: 300px;*/
     padding-right: 10px;
+    max-height: 750px;
+    overflow-y: scroll;
 }
 
 .inspector_green {
@@ -43,9 +45,7 @@
 }
 
 .inspector ul {
-       border-color: #d46464;
-    border-width: 1px;
-    border: solid 2px whitesmoke;
+    border: solid 3px whitesmoke;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 10px;
@@ -69,3 +69,31 @@
 .inspector_visitor_group {
     float: left;
 }
+
+.inspector_dialog .dijitDialogPaneContent {
+    max-height: 750px !important;
+    width: 100%;
+}
+
+.inspector_group {
+    border: dashed 3px #c7d500;
+    margin-bottom: 4px;
+}
+
+.inspector_group ul:last-child {
+    margin-bottom: 0px;
+}
+
+
+/*ul.inspector .inspector_property:first-of-type {
+    margin-top: 0px;
+}
+
+.inspector_property {
+    margin-top: 5px;
+}*/
+
+li.inspector_area {
+    margin-bottom: 5px;
+}
+

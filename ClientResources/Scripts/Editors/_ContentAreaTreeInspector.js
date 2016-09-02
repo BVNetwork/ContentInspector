@@ -40,7 +40,7 @@
             },
 
             _modifyNode: function (node, model) {
-                console.log(model);
+               // console.log(model);
                 // locate default icon
                
                 var imgNode = query("img.dijitIcon", node.domNode);
