@@ -19,7 +19,7 @@ namespace BVNetwork.ContentAreaInspector
     {
         public ActionResult Index(int id)
         {
-            Thread.Sleep(500);
+        //    Thread.Sleep(500);
             var model = CreateModel(id, null, null);
             //return View(Paths.ToResource(this.GetType(),
             //    "Views/ContentAreaInspector/Index.cshtml"), model);

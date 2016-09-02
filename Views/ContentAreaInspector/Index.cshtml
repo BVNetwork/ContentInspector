@@ -1,12 +1,12 @@
-﻿@using System.Collections.Generic
-@using System.Linq
-@using BVNetwork.ContentAreaInspector
+﻿@using BVNetwork.ContentAreaInspector
+@using EPiServer.Shell
 @model BVNetwork.ContentAreaInspector.ContentAreaInspectorViewModel
 @{
     ViewBag.Title = "title";
     Layout = null;
 }
-<canvas id="canvas" width="1000px" height="100px" style="border: 1px solid black;"></canvas>
+@*<script src="@Paths.ToResource("contentareainspector","ClientResources/scripts/rasterizeHTML.allinone.js")"></script>*@
+@*<script src="@Paths.ToResource(typeof(ContentAreaInspectorController).GetType(),"/ClientResources/scripts/rasterizeHTML.allinone.js")"></script>*@
 
 <div class="inspector_container">
     <div class="inspector_main">
@@ -92,7 +92,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
         }
         @if (inspectorViewModel.Content.MainType == MainContentType.Image)
         {
-            <img width="48" height="48" src="@inspectorViewModel.Content.PreviewUrl" />
+            <img width="48" height="48" src="@inspectorViewModel.Content.ThumbnailUrl" />
         }
         else if (inspectorViewModel.Content.MainType == MainContentType.Block)
         {
@@ -104,9 +104,36 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
         }
         <li><b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a></li>
         <li>
-            <button data-dojo-type="dijit/form/Button" data-dojo-id="myToggleButton" onClick="rasterizeHTML.drawHTML('<h1>hello<h2>',document.getElementById('canvas'))" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconCut'" type="button">
-                Click me!
-            </button>
+
+            <div class="inspector_preview_button" data-id="@inspectorViewModel.Content.Id" data-previewUrl="@inspectorViewModel.Content.PreviewUrl">
+                Click mdde!
+
+
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+
+                    @*rasterizeHtml.drawURL('hello',document.getElementById('canvas'));*@
+
+                    @*dojo.xhrGet({
+                        url: "@Url.Action("Search")",
+
+                        form: "searchForm",
+                        handleAs: "text",
+                        timeout: 5000,
+
+                        load: function(response, ioArgs){
+                        dojo.byId("results").innerHTML = response;
+
+                        // return the response for succeeding callbacks
+                        return response;
+                        },
+
+                        error: function(response, ioArgs){
+                        dojo.byId("results").innerHTML = "Form submission failed.";
+                        return response;
+                        }
+                        });*@
+                </script>
+            </div>
         </li>
         <li>Type: @inspectorViewModel.Content.Type</li>
         <li>Status: @inspectorViewModel.Content.Status</li>
@@ -120,11 +147,18 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
                     <div class="inspector_property">
                         [Content reference]<i> @contentReferenceViewModel.Name</i> value:
                         @RenderContent(contentReferenceViewModel.ContentReferenceItem, null)
-                        </div>
-</li>
+                    </div>
+                </li>
             }
         }
     </ul>
 
 
 }
+
+@*<script>
+        $(document).on("click", '.inspector_preview_button', function (event) {
+            alert("new link clicked!");
+            //onClick = "alert('nepe');rasterizeHTML.drawHTML('<h1>hello<h2>',document.getElementById('canvas'))"
+        });
+    </script>*@
