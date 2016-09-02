@@ -19,7 +19,7 @@ namespace BVNetwork.ContentAreaInspector
     {
         public ActionResult Index(int id)
         {
-            //Thread.Sleep(3000);
+            Thread.Sleep(500);
             var model = CreateModel(id, null, null);
             //return View(Paths.ToResource(this.GetType(),
             //    "Views/ContentAreaInspector/Index.cshtml"), model);
@@ -35,14 +35,16 @@ namespace BVNetwork.ContentAreaInspector
             {
 
                 Name = content.Name,
+                Id = content.ContentLink.ID.ToString(),
                 Status = status,
-                Type = content.GetOriginalType().Name
+                Type = content.GetOriginalType().Name,
+                PreviewUrl = content.PreviewUrl()
             };
             currentItem.EditUrl = PageEditing.GetEditUrl(content.ContentLink);
             if (content is ImageData)
             {
                 currentItem.MainType = MainContentType.Image;
-                currentItem.PreviewUrl = content.ThumbnailUrl();
+                currentItem.ThumbnailUrl = content.ThumbnailUrl();
             }
             else if (content is BlockData)
                 currentItem.MainType = MainContentType.Block;
