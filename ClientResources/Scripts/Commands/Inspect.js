@@ -50,69 +50,52 @@
                 title: that.model.name,
                 style: "min-width:600px;",
                 class: "inspector_dialog",
-                href: "/contentareainspector/" + that.model.contentLink,
-                //   onDownloadEnd: dojo.hitch(this, this.initializeDialog, this._doSomethingCrazy(this))
-                //   onDownloadEnd: this._doSomethingCrazy(this)
-
+                href: "/contentareainspector/" + that.model.contentLink
             });
             dialog.set('onDownloadEnd', function () {
-
-                var arg = this;
-                console.log(dialog.domNode);
-              //  var nodelist = query(".inspector_preview_button", dialog.domNode);
-
                 query(".inspector_preview_button", dialog.domNode).connect("onclick", function () {
                     var previewbtn = this;
-                    var id = attr.get(this, "data-id");
-                    var previewUrl = attr.get(this, "data-previewUrl");
-                    // var item = that._store.get(5);
-               //     var contentData = that._store.get(id);
-                    //when(that._store.get(id), function (returnValue) {
-                    //    console.log(id);
-                    //    contentData = returnValue;
-                    //    callback(contentData);
-                    //});
-                  //  console.log(contentData);
-                    var canvas = document.createElement("canvas");
-                    canvas.height = 400;
-                    canvas.width = 500;
-                    //   console.log('burg.3..');
-                    var context = canvas.getContext("2d");
-                    context.scale(0.5, 0.5);
+                    var checked = attr.get(this, "data-checked");
 
-                    rasterizeHtml.drawURL(previewUrl, canvas, { height: 800, width: 1000 });
-                    // rasterizeHtml.drawHTML("<h1>ah</h1>", content);
-                    //  console.log('raz');
-                    console.log(previewbtn.id);
-                    var previewTooltip = new TooltipDialog({
-                        connectId: [dialog.id],
-                        content: canvas
-                    });
-                    arg.own(previewTooltip);
-
-                    popup.open({
-                        popup: previewTooltip,
-                        around: dom.byId(dialog.id),
-                        orient: ["after-centered"]
-                    });
-
-                    //  alert("This button is hooked up!");
+                    if (checked === false) {
+                        attr.set(this, "data-checked", true);
+                    }
+                    else{
+                        attr.set(this, "data-checked", false);
+                        var previewUrl = attr.get(this, "data-previewUrl");
+                      
+                        var loaderdiv = document.createElement("div");
+                        loaderdiv.innerHTML = "<span class=\"dijitContentPaneLoading\"><span class=\"dijitInline dijitIconLoading\"></span>Loading preview...</span>";
+                        loaderdiv.className = "inspector_preview_loader";
+                       
+                        var previewTooltip = new TooltipDialog({
+                            connectId: [dialog.id],
+                            content: loaderdiv
+                        });
+                        dialog.own(previewTooltip);
+                        popup.open({
+                            popup: previewTooltip,
+                            around: dom.byId(dialog.id),
+                            orient: ["after-centered"]
+                        });
+                        var canvas = document.createElement("canvas");
+                        canvas.height = 400;
+                        canvas.width = 500;
+                        var context = canvas.getContext("2d");
+                        context.scale(0.5, 0.5);
+                        rasterizeHtml.drawURL(previewUrl, canvas, { height: 800, width: 1000 }).then(function success(renderResult) {
+                            previewTooltip.set("content", canvas);
+                        });
+                        on(previewbtn, "click", function () {
+                            popup.close(previewTooltip);
+                        });
+                        dialog.connect(dialog, "hide", function (e) {
+                            popup.close(previewTooltip);
+                        });
+                    }
                 });
-                //   var previewbtn = nodelist[0];
-
-
-                //    console.log(contentData);
-                //if (isImage) {
-                //    content = document.createElement("img");
-                //    content.src = previewUrl;
-                //    content.setAttribute("style", "max-width: 500px;");
-                //} else {
-
-
-
             });
             dialog.show();
-
         },
 
         _onModelValueChange: function () {
