@@ -52,25 +52,25 @@
                 class: "inspector_dialog",
                 href: "/contentareainspector/" + that.model.contentLink
             });
+
             dialog.set('onDownloadEnd', function () {
                 query(".inspector_preview_button", dialog.domNode).connect("onclick", function () {
                     var previewbtn = this;
-                    var checked = attr.get(this, "data-checked");
-
-                    if (checked === false) {
-                        attr.set(this, "data-checked", true);
-                    }
-                    else{
+                    if (!dojo.hasClass(previewbtn, "epi-icon--active")) {
+                        dojo.addClass(previewbtn, "epi-icon--active");
                         attr.set(this, "data-checked", false);
                         var previewUrl = attr.get(this, "data-previewUrl");
-                      
+
                         var loaderdiv = document.createElement("div");
                         loaderdiv.innerHTML = "<span class=\"dijitContentPaneLoading\"><span class=\"dijitInline dijitIconLoading\"></span>Loading preview...</span>";
                         loaderdiv.className = "inspector_preview_loader";
-                       
+
                         var previewTooltip = new TooltipDialog({
                             connectId: [dialog.id],
-                            content: loaderdiv
+                            content: loaderdiv,
+                            onHide: function () {
+                                dojo.removeClass(previewbtn, "epi-icon--active");
+                            }
                         });
                         dialog.own(previewTooltip);
                         popup.open({
@@ -91,6 +91,10 @@
                         });
                         dialog.connect(dialog, "hide", function (e) {
                             popup.close(previewTooltip);
+                        });
+                        previewTooltip.connect(previewTooltip, "hide", function (e) {
+                            console.log('hihi');
+                            previewbtn.destroy();
                         });
                     }
                 });
