@@ -63,80 +63,61 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
 
         @:<div class="inspector_group">
      }
-    <ul class="inspector">
-        @if (!string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
-        {
-            <li class="inspector_green">
-                <i>
-                    <span class="epi-iconUsers dijitFolderOpened inspector_visitor_group"></span>
-                    <span class="inspector_black">Visible for:</span>
-                    @if (inspectorViewModel.VisitorGroupsNames != null && inspectorViewModel.VisitorGroupsNames.Any())
+    <ul class="inspector inspectorcontent">
+        <li class="inspectoritem">
+            <span>
+                <ul>
+                    @if (!string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
                     {
+                        <li class="inspector_green">
+                            <i>
+                                <span class="epi-iconUsers dijitFolderOpened inspector_visitor_group"></span>
+                                <span class="inspector_black">Visible for:</span>
+                                @if (inspectorViewModel.VisitorGroupsNames != null && inspectorViewModel.VisitorGroupsNames.Any())
+                                {
 
-                        for (int i = 0; i < inspectorViewModel.VisitorGroupsNames.Count; i++)
-                        {
-                            var visitorGroup = inspectorViewModel.VisitorGroupsNames[i];
-                            @visitorGroup
-                            if (i != inspectorViewModel.VisitorGroupsNames.Count - 1)
-                            {
-                                <span class="inspector_black">and</span>
-                            }
-                        }
+                                    for (int i = 0; i < inspectorViewModel.VisitorGroupsNames.Count; i++)
+                                    {
+                                        var visitorGroup = inspectorViewModel.VisitorGroupsNames[i];
+                                        @visitorGroup
+                                        if (i != inspectorViewModel.VisitorGroupsNames.Count - 1)
+                                        {
+                                            <span class="inspector_black">and</span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <text>Everyone else </text>
+                                }
+                            </i>
+                        </li>
                     }
-                    else
+                    @if (inspectorViewModel.Content.MainType == MainContentType.Image)
                     {
-                        <text>Everyone else </text>
+                        <img width="48" height="48" src="@inspectorViewModel.Content.ThumbnailUrl" />
                     }
-                </i>
-            </li>
-        }
-        @if (inspectorViewModel.Content.MainType == MainContentType.Image)
-        {
-            <img width="48" height="48" src="@inspectorViewModel.Content.ThumbnailUrl" />
-        }
-        else if (inspectorViewModel.Content.MainType == MainContentType.Block)
-        {
-            <span class="epi-iconObjectSharedBlock epi-icon--large inspector_block"></span>
-        }
-        else if (inspectorViewModel.Content.MainType == MainContentType.Page)
-        {
-            <span class="epi-iconObjectPage epi-icon--large inspector_block"></span>
-        }
-        <li><b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a></li>
-        <li>
+                    else if (inspectorViewModel.Content.MainType == MainContentType.Block)
+                    {
+                        <span class="epi-iconObjectSharedBlock epi-icon--large inspector_block"></span>
+                    }
+                    else if (inspectorViewModel.Content.MainType == MainContentType.Page)
+                    {
+                        <span class="epi-iconObjectPage epi-icon--large inspector_block"></span>
+                    }
+                    <li>
+                        <b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a>
 
-            <div class="inspector_preview_button" data-id="@inspectorViewModel.Content.Id" data-previewUrl="@inspectorViewModel.Content.PreviewUrl">
-                Click mdde!
+                        <span data-id="@inspectorViewModel.Content.Id" data-previewUrl="@inspectorViewModel.Content.PreviewUrl" class="inspector_preview_button dijitReset dijitInline dijitIcon epi-icon--medium epi-iconPreview">
 
-
-                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-
-                    @*rasterizeHtml.drawURL('hello',document.getElementById('canvas'));*@
-
-                    @*dojo.xhrGet({
-                        url: "@Url.Action("Search")",
-
-                        form: "searchForm",
-                        handleAs: "text",
-                        timeout: 5000,
-
-                        load: function(response, ioArgs){
-                        dojo.byId("results").innerHTML = response;
-
-                        // return the response for succeeding callbacks
-                        return response;
-                        },
-
-                        error: function(response, ioArgs){
-                        dojo.byId("results").innerHTML = "Form submission failed.";
-                        return response;
-                        }
-                        });*@
-                </script>
-            </div>
+                        </span>
+                    </li>
+                    <li>Type: @inspectorViewModel.Content.Type</li>
+                    <li>Status: @inspectorViewModel.Content.Status</li>
+                </ul>
+            </span>
         </li>
-        <li>Type: @inspectorViewModel.Content.Type</li>
-        <li>Status: @inspectorViewModel.Content.Status</li>
+
 
         @RenderContentArea(inspectorViewModel.ContentAreaItems)
         @if (inspectorViewModel.ContentReferenceItems != null && inspectorViewModel.ContentReferenceItems.Any())
@@ -152,13 +133,4 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
             }
         }
     </ul>
-
-
 }
-
-@*<script>
-        $(document).on("click", '.inspector_preview_button', function (event) {
-            alert("new link clicked!");
-            //onClick = "alert('nepe');rasterizeHTML.drawHTML('<h1>hello<h2>',document.getElementById('canvas'))"
-        });
-    </script>*@
