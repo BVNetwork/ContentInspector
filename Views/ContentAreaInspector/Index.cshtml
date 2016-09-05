@@ -1,18 +1,15 @@
 ﻿@using BVNetwork.ContentAreaInspector
-@using EPiServer.Shell
+@using EPiServer.Core
 @model BVNetwork.ContentAreaInspector.ContentAreaInspectorViewModel
 @{
     ViewBag.Title = "title";
     Layout = null;
 }
-@*<script src="@Paths.ToResource("contentareainspector","ClientResources/scripts/rasterizeHTML.allinone.js")"></script>*@
-@*<script src="@Paths.ToResource(typeof(ContentAreaInspectorController).GetType(),"/ClientResources/scripts/rasterizeHTML.allinone.js")"></script>*@
-
 <div class="inspector_container">
     <div class="inspector_main">
         <ul>
             <li>Type: @Model.Content.Type</li>
-            <li>Status: @Model.Content.Status</li>
+            @RenderStatus(Model.Content.Status)
         </ul>
     </div>
     <ul class="inspector">
@@ -21,7 +18,14 @@
         {
             foreach (var contentReference in Model.ContentReferenceItems)
             {
-                @RenderContent(contentReference.ContentReferenceItem, null)
+                <li class="inspector_area">
+                    <div class="inspector_property">[Content reference]<i> @contentReference.Name</i>  value:</div>
+                    <div class="inspector_content_area">
+                        <div>
+                            @RenderContent(contentReference.ContentReferenceItem, null)
+                        </div>
+                    </div>
+                </li>
             }
         }
     </ul>
@@ -60,7 +64,6 @@ if (!string.IsNullOrEmpty(previousContentGroup) && string.IsNullOrEmpty(inspecto
 }
 if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
 {
-
         @:<div class="inspector_group">
      }
     <ul class="inspector inspectorcontent">
@@ -113,11 +116,18 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
                         </span>
                     </li>
                     <li>Type: @inspectorViewModel.Content.Type</li>
-                    <li>Status: @inspectorViewModel.Content.Status</li>
+                    @RenderStatus(inspectorViewModel.Content.Status)
+                    @if (inspectorViewModel.Content.IsMaxLevel)
+                    {
+                        <li><i>Content has sub items, but the inspector will only show 10 sub item levels. Please edit and inspect a sub item to see additional levels</i></li>
+                    }
+                    @if (inspectorViewModel.Content.HasDuplicateParent)
+                    {
+                        <li><i>Content has already been expanded by a parent item. Further sub items will not be displayed</i></li>
+                    }
                 </ul>
             </span>
         </li>
-
 
         @RenderContentArea(inspectorViewModel.ContentAreaItems)
         @if (inspectorViewModel.ContentReferenceItems != null && inspectorViewModel.ContentReferenceItems.Any())
@@ -133,4 +143,18 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
             }
         }
     </ul>
+}
+
+@helper RenderStatus(VersionStatus status)
+{
+string cssClass = "";
+if (status == VersionStatus.DelayedPublish)
+{
+    cssClass = "inspector_scheduled";
+}
+else if (status != VersionStatus.Published)
+{
+    cssClass = "inspector_not_published epi-iconDanger  epi-icon--colored";
+}
+    <li>Status: <span class="@cssClass">@EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + status.ToString().ToLower())</span></li>
 }

@@ -19,27 +19,35 @@ namespace BVNetwork.ContentAreaInspector
     {
         public ActionResult Index(int id)
         {
-            //Thread.Sleep(7000);
-            var model = CreateModel(id, null, null);
+            var model = CreateModel(id, null, null, 0, new List<int>());
             //return View(Paths.ToResource(this.GetType(),
             //    "Views/ContentAreaInspector/Index.cshtml"), model);
             return View(Paths.PublicRootPath + "_ContentAreaInspector/Views/ContentAreaInspector/Index.cshtml", model);
         }
 
-        private ContentAreaInspectorViewModel CreateModel(int id, List<string> visitorGroupNames, string contentGroup)
+        private ContentAreaInspectorViewModel CreateModel(int id, List<string> visitorGroupNames, string contentGroup, int level, List<int> parentIds)
         {
+            level++;
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
             var content = contentLoader.Get<IContent>(new ContentReference(id));
-            var status = EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + (content as IVersionable)?.Status.ToString().ToLower());
+            var status = (content as IVersionable).Status;
             var currentItem = new ContentAreaInspectorViewModel.InspectorContentViewModel()
             {
-
                 Name = content.Name,
                 Id = content.ContentLink.ID.ToString(),
                 Status = status,
                 Type = content.GetOriginalType().Name,
                 PreviewUrl = content.PreviewUrl()
             };
+            if (parentIds.Contains(id))
+            {
+                currentItem.HasDuplicateParent = true;
+            }
+            else
+            {
+                parentIds.Add(id);
+            }
+
             currentItem.EditUrl = PageEditing.GetEditUrl(content.ContentLink);
             if (content is ImageData)
             {
@@ -59,6 +67,10 @@ namespace BVNetwork.ContentAreaInspector
                 ContentGroup = contentGroup,
                 ContentReferenceItems = new List<ContentAreaInspectorViewModel.ContentReferenceViewModel>()
             };
+            if (level >= 10)
+            {
+                model.Content.IsMaxLevel = true;
+            }
             var contentType = ServiceLocator.Current.GetInstance<IContentTypeRepository>().Load(content.ContentTypeID);
 
             // Get content area properties
@@ -67,6 +79,10 @@ namespace BVNetwork.ContentAreaInspector
                 var nestedContentArea = content.Property[prop.Name] as PropertyContentArea;
                 if (nestedContentArea?.Value is ContentArea && (nestedContentArea.Value as ContentArea).Items != null)
                 {
+                    if (model.Content.IsMaxLevel || currentItem.HasDuplicateParent)
+                    {
+                        return model;
+                    }
                     var contentAreaViewModel = new ContentAreaInspectorViewModel.ContentAreaItemViewModel
                     {
                         Name = prop.Name,
@@ -80,7 +96,7 @@ namespace BVNetwork.ContentAreaInspector
                         var visitorGroups = GetVisitorGroupNames(internalFormat);
 
                         contentAreaViewModel.ContentAreaItems.Add(CreateModel(contentAreaItem.ContentLink.ID,
-                            visitorGroups, contentAreaItem.ContentGroup));
+                            visitorGroups, contentAreaItem.ContentGroup, level, new List<int> (parentIds)));
 
                     }
                     model.ContentAreaItems.Add(contentAreaViewModel);
@@ -94,7 +110,13 @@ namespace BVNetwork.ContentAreaInspector
                 var contentReference = contentReferenceProperty?.Value as ContentReference;
                 if (contentReference != null)
                 {
-                    var contentReferenceItem = CreateModel(contentReference.ID, null, null);
+                    if (level >= 10 || model.Content.IsMaxLevel)
+                    {
+                        return model;
+                    }
+                    if (currentItem.HasDuplicateParent)
+                        return model;
+                    var contentReferenceItem = CreateModel(contentReference.ID, null, null, level, new List<int>(parentIds));
 
                     var contentReferenceViewModel = new ContentAreaInspectorViewModel.ContentReferenceViewModel()
                     {
@@ -103,7 +125,7 @@ namespace BVNetwork.ContentAreaInspector
                     };
                     model.ContentReferenceItems.Add(contentReferenceViewModel);
                 }
-               
+
             }
             return model;
         }

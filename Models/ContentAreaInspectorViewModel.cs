@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EPiServer.Core;
 
 namespace BVNetwork.ContentAreaInspector
 {
@@ -14,12 +15,15 @@ namespace BVNetwork.ContentAreaInspector
         {
             public string Name { get; set; }
             public string Id { get; set; }
-            public string Status { get; set; }
+            public VersionStatus Status { get; set; }
             public string Type { get; set; }
             public string EditUrl { get; set; }
             public string PreviewUrl { get; set; }
             public string ThumbnailUrl { get; set; }
             public MainContentType MainType { get; set; }
+            public bool IsMaxLevel { get; set; }
+            public bool HasDuplicateParent { get; set; }
+
 
         }
 

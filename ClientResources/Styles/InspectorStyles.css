@@ -19,6 +19,17 @@ li.inspectoritem>span:hover .inspector_preview_button {
     display: block;
     
 }
+
+
+.inspector_scheduled {
+    background-color: #ffee25;
+}
+.inspector_not_published {
+    padding-left: 19px;
+}
+
+
+
  .inspector_preview_button.epi-icon--active {
     display: block;
 }
