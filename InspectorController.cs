@@ -19,7 +19,7 @@ namespace BVNetwork.ContentAreaInspector
     {
         public ActionResult Index(int id)
         {
-        //    Thread.Sleep(500);
+            //Thread.Sleep(7000);
             var model = CreateModel(id, null, null);
             //return View(Paths.ToResource(this.GetType(),
             //    "Views/ContentAreaInspector/Index.cshtml"), model);
@@ -88,7 +88,7 @@ namespace BVNetwork.ContentAreaInspector
             }
 
             // Get content reference properties
-            foreach (var prop in contentType.PropertyDefinitions.Where(x => x.Type.Name == "ContentReference"))
+            foreach (var prop in contentType.PropertyDefinitions.Where(x => x.Type.Name == "ContentReference" || x.Type.Name == "PageReference"))
             {
                 var contentReferenceProperty = content.Property[prop.Name] as PropertyContentReference;
                 var contentReference = contentReferenceProperty?.Value as ContentReference;

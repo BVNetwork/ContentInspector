@@ -108,7 +108,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
                     <li>
                         <b>@inspectorViewModel.Content.Name</b> <a target="_blank" class="epi-visibleLink" href="@inspectorViewModel.Content.EditUrl">edit </a>
 
-                        <span data-id="@inspectorViewModel.Content.Id" data-previewUrl="@inspectorViewModel.Content.PreviewUrl" class="inspector_preview_button dijitReset dijitInline dijitIcon epi-icon--medium epi-iconPreview">
+                        <span data-type="@inspectorViewModel.Content.MainType" data-previewUrl="@inspectorViewModel.Content.PreviewUrl" class="inspector_preview_button dijitReset dijitInline dijitIcon epi-icon--medium epi-iconPreview">
 
                         </span>
                     </li>

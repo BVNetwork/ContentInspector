@@ -58,9 +58,8 @@
                     var previewbtn = this;
                     if (!dojo.hasClass(previewbtn, "epi-icon--active")) {
                         dojo.addClass(previewbtn, "epi-icon--active");
-                        attr.set(this, "data-checked", false);
                         var previewUrl = attr.get(this, "data-previewUrl");
-
+                        var isImage = attr.get(this, "data-type") === "Image";
                         var loaderdiv = document.createElement("div");
                         loaderdiv.innerHTML = "<span class=\"dijitContentPaneLoading\"><span class=\"dijitInline dijitIconLoading\"></span>Loading preview...</span>";
                         loaderdiv.className = "inspector_preview_loader";
@@ -78,14 +77,24 @@
                             around: dom.byId(dialog.id),
                             orient: ["after-centered"]
                         });
-                        var canvas = document.createElement("canvas");
-                        canvas.height = 400;
-                        canvas.width = 500;
-                        var context = canvas.getContext("2d");
-                        context.scale(0.5, 0.5);
-                        rasterizeHtml.drawURL(previewUrl, canvas, { height: 800, width: 1000 }).then(function success(renderResult) {
-                            previewTooltip.set("content", canvas);
-                        });
+                        var previewContent;
+
+                        if (isImage) {
+                            previewContent = document.createElement("img");
+                            previewContent.src = previewUrl;
+                            previewContent.setAttribute("style", "max-width: 500px;");
+                            previewTooltip.set("content", previewContent);
+                        }
+                        else {
+                            previewContent = document.createElement("canvas");
+                            previewContent.height = 400;
+                            previewContent.width = 500;
+                            var context = previewContent.getContext("2d");
+                            context.scale(0.5, 0.5);
+                            rasterizeHtml.drawURL(previewUrl, previewContent, { height: 800, width: 1000 }).then(function success(renderResult) {
+                                previewTooltip.set("content", previewContent);
+                            });
+                        }
                         on(previewbtn, "click", function () {
                             popup.close(previewTooltip);
                         });
