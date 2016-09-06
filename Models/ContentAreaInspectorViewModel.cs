@@ -23,6 +23,7 @@ namespace BVNetwork.ContentAreaInspector
             public MainContentType MainType { get; set; }
             public bool IsMaxLevel { get; set; }
             public bool HasDuplicateParent { get; set; }
+            public Dictionary<string,object> AdditionalProperties { get; set; }
 
 
         }

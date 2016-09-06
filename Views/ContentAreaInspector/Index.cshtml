@@ -10,6 +10,7 @@
         <ul>
             <li>Type: @Model.Content.Type</li>
             @RenderStatus(Model.Content.Status)
+            @RenderAdditionalProperties(Model.Content.AdditionalProperties)
         </ul>
     </div>
     <ul class="inspector">
@@ -117,6 +118,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(inspecto
                     </li>
                     <li>Type: @inspectorViewModel.Content.Type</li>
                     @RenderStatus(inspectorViewModel.Content.Status)
+                    @RenderAdditionalProperties(inspectorViewModel.Content.AdditionalProperties)
                     @if (inspectorViewModel.Content.IsMaxLevel)
                     {
                         <li><i>Content has sub items, but the inspector will only show 10 sub item levels. Please edit and inspect a sub item to see additional levels</i></li>
@@ -158,3 +160,12 @@ else if (status != VersionStatus.Published)
 }
     <li>Status: <span class="@cssClass">@EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + status.ToString().ToLower())</span></li>
 }
+
+@helper RenderAdditionalProperties(Dictionary<string, object> additionalProperties)
+{
+foreach (var additionalProperty in additionalProperties)
+{
+        <li>@additionalProperty.Key<text>:</text> <i>@additionalProperty.Value</i></li>
+}
+}
+

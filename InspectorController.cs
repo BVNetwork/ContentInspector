@@ -8,6 +8,7 @@ using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Editor;
+using EPiServer.Filters;
 using EPiServer.Personalization.VisitorGroups;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
@@ -15,21 +16,24 @@ using EPiServer.SpecializedProperties;
 
 namespace BVNetwork.ContentAreaInspector
 {
+    [Authorize]
     public class ContentAreaInspectorController : Controller
     {
         public ActionResult Index(int id)
         {
-            var model = CreateModel(id, null, null, 0, new List<int>());
+            var model = CreateModel(new ContentReference(id), null, null, 0, new List<int>());
             //return View(Paths.ToResource(this.GetType(),
             //    "Views/ContentAreaInspector/Index.cshtml"), model);
             return View(Paths.PublicRootPath + "_ContentAreaInspector/Views/ContentAreaInspector/Index.cshtml", model);
         }
 
-        private ContentAreaInspectorViewModel CreateModel(int id, List<string> visitorGroupNames, string contentGroup, int level, List<int> parentIds)
+        private ContentAreaInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames, string contentGroup,
+            int level, List<int> parentIds)
         {
             level++;
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            var content = contentLoader.Get<IContent>(new ContentReference(id));
+            var content = contentLoader.Get<IContent>(contentReference);
+
             var status = (content as IVersionable).Status;
             var currentItem = new ContentAreaInspectorViewModel.InspectorContentViewModel()
             {
@@ -37,15 +41,16 @@ namespace BVNetwork.ContentAreaInspector
                 Id = content.ContentLink.ID.ToString(),
                 Status = status,
                 Type = content.GetOriginalType().Name,
-                PreviewUrl = content.PreviewUrl()
+                PreviewUrl = content.PreviewUrl(),
+                AdditionalProperties = new Dictionary<string, object>()
             };
-            if (parentIds.Contains(id))
+            if (parentIds.Contains(contentReference.ID))
             {
                 currentItem.HasDuplicateParent = true;
             }
             else
             {
-                parentIds.Add(id);
+                parentIds.Add(contentReference.ID);
             }
 
             currentItem.EditUrl = PageEditing.GetEditUrl(content.ContentLink);
@@ -94,38 +99,53 @@ namespace BVNetwork.ContentAreaInspector
                         var contentAreaItem = contentArea.Items[i];
                         var internalFormat = contentArea.Fragments[i].InternalFormat;
                         var visitorGroups = GetVisitorGroupNames(internalFormat);
-
-                        contentAreaViewModel.ContentAreaItems.Add(CreateModel(contentAreaItem.ContentLink.ID,
-                            visitorGroups, contentAreaItem.ContentGroup, level, new List<int> (parentIds)));
-
+                        contentAreaViewModel.ContentAreaItems.Add(CreateModel(contentAreaItem.ContentLink,
+                            visitorGroups, contentAreaItem.ContentGroup, level, new List<int>(parentIds)));
                     }
                     model.ContentAreaItems.Add(contentAreaViewModel);
                 }
             }
 
-            // Get content reference properties
-            foreach (var prop in contentType.PropertyDefinitions.Where(x => x.Type.Name == "ContentReference" || x.Type.Name == "PageReference"))
+
+            var properties = contentType.ModelType.GetProperties();
+            foreach (var propertyInfo in properties)
             {
-                var contentReferenceProperty = content.Property[prop.Name] as PropertyContentReference;
-                var contentReference = contentReferenceProperty?.Value as ContentReference;
-                if (contentReference != null)
+                var inspectableAttribute =
+                    Attribute.GetCustomAttribute(propertyInfo, typeof(InspectableAttribute), true) as
+                        InspectableAttribute;
+                if (inspectableAttribute != null)
                 {
-                    if (level >= 10 || model.Content.IsMaxLevel)
+                    if (propertyInfo.PropertyType == typeof(ContentReference) ||
+                        propertyInfo.PropertyType == typeof(PageReference))
                     {
-                        return model;
+                        var contentReferenceProperty = content.Property[propertyInfo.Name] as PropertyContentReference;
+                        var contentReferenceSubItem = contentReferenceProperty?.Value as ContentReference;
+                        if (contentReferenceSubItem != null)
+                        {
+                            if (level >= 10 || model.Content.IsMaxLevel)
+                            {
+                                return model;
+                            }
+                            if (currentItem.HasDuplicateParent)
+                                return model;
+                            var contentReferenceItem = CreateModel(contentReferenceSubItem, null, null, level,
+                                new List<int>(parentIds));
+
+                            var contentReferenceViewModel = new ContentAreaInspectorViewModel.ContentReferenceViewModel()
+                            {
+
+                                Name = contentReferenceProperty.TranslateDisplayName() ?? propertyInfo.Name,
+                                ContentReferenceItem = contentReferenceItem
+                            };
+                            model.ContentReferenceItems.Add(contentReferenceViewModel);
+                        }
                     }
-                    if (currentItem.HasDuplicateParent)
-                        return model;
-                    var contentReferenceItem = CreateModel(contentReference.ID, null, null, level, new List<int>(parentIds));
-
-                    var contentReferenceViewModel = new ContentAreaInspectorViewModel.ContentReferenceViewModel()
+                    else
                     {
-                        Name = prop.TranslateDisplayName() ?? prop.Name,
-                        ContentReferenceItem = contentReferenceItem
-                    };
-                    model.ContentReferenceItems.Add(contentReferenceViewModel);
+                        var property = content.Property[propertyInfo.Name];                     
+                        model.Content.AdditionalProperties.Add(property.TranslateDisplayName(), property.Value);
+                    }
                 }
-
             }
             return model;
         }
@@ -158,6 +178,5 @@ namespace BVNetwork.ContentAreaInspector
         Block,
         Image,
         Page
-
     }
 }

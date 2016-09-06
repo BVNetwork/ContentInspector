@@ -161,6 +161,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Inspectable.cs" />
     <Compile Include="Models\ContentAreaInspectorViewModel.cs" />
     <Compile Include="Initialization.cs" />
     <Compile Include="InspectorController.cs" />
@@ -178,7 +179,9 @@
   <ItemGroup>
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
-    <None Include="module.config" />
+    <None Include="module.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Views\ContentAreaInspector\Index.cshtml" />
     <Content Include="Views\Web.config" />
