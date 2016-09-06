@@ -22,9 +22,9 @@ namespace BVNetwork.ContentAreaInspector
         public ActionResult Index(int id)
         {
             var model = CreateModel(new ContentReference(id), null, null, 0, new List<int>());
-            //return View(Paths.ToResource(this.GetType(),
-            //    "Views/ContentAreaInspector/Index.cshtml"), model);
-            return View(Paths.PublicRootPath + "_ContentAreaInspector/Views/ContentAreaInspector/Index.cshtml", model);
+            return View(Paths.ToResource(this.GetType(),
+                "Views/ContentAreaInspector/Index.ascx"), model);
+            //  return View(Paths.PublicRootPath + "_ContentAreaInspector/Views/ContentAreaInspector/Index.ascx", model);
         }
 
         private ContentAreaInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames, string contentGroup,
