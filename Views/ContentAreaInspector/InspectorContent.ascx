@@ -65,9 +65,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
                     </li>
                     <li>Type: <%:Model.Content.Type %></li>
            <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content);%> 
-                       <%if(Model.Content.PublishedDate != null) { %>
-            <li>Start publish:<%:Model.Content.PublishedDate %></li>
-            <%} %>
+        
                                   <%   foreach (var additionalProperty in Model.Content.AdditionalProperties)
     {%>
         <li><%:additionalProperty.Key %>: <i><%:additionalProperty.Value %></i></li>

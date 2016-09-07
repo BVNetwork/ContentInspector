@@ -17,9 +17,10 @@
                var statusString = EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + Model.Status.ToString().ToLower());
      %>
     <li>Status: 
-        <span class="<%:cssClass %>"><%: statusString %></span> - 
-        <% if (Model.PublishedDate != null)
+        <span class="<%:cssClass %>"><%: statusString %></span>
+        <% if ((Model.Status == VersionStatus.Published || Model.Status == VersionStatus.DelayedPublish) && Model.PublishedDate != null)
            { %>
+        - 
         <%: Model.PublishedDate %>
         <% } %>
     </li>
