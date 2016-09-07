@@ -175,12 +175,15 @@
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BVNetwork.ContentAreaInspector.Version.targets" />
+    <None Include="BVNetwork.ContentAreaInspector.nuspec" />
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="module.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="packageTools.targets" />
     <None Include="Views\ContentAreaInspector\Index.cshtml" />
     <Content Include="Views\ContentAreaInspector\Index.ascx" />
     <Content Include="Views\ContentAreaInspector\InspectorStatus.ascx" />
@@ -189,11 +192,34 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- Used below, so define it first -->
+  <PropertyGroup>
+    <SolutionDir>$(ProjectDir)</SolutionDir>
+    <!-- NOTE! This is different between cms versions, the zip file needs to be named the same in the package -->
+    <zipFile>$(OutDir)\BVNetwork.ContentAreaInspector.zip</zipFile>
+  </PropertyGroup>
+  <!-- This holds the version of the package -->
+  <Import Project="$(SolutionDir)\$(ProjectName).Version.targets" Condition="Exists('$(SolutionDir)\$(ProjectName).Version.targets')" />
+  <!-- Pack -->
+  <Import Project="$(SolutionDir)\packageTools.targets" Condition="Exists('$(SolutionDir)\packageTools.targets')" />
+  <Target Name="CreateNugetPackage" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' ">
+    <!-- Create the Versioned out dir for the client resources-->
+    <!-- Copy -->
+    <ItemGroup>
+      <ClientResources Include="$(SolutionDir)\ClientResources\**\*" />
+      <Views Include="$(SolutionDir)\Views\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="$(SolutionDir)\module.config" DestinationFolder="$(TmpOutDir)\content" />
+    <Copy SourceFiles="@(ClientResources)" DestinationFiles="@(ClientResources -> '$(TmpOutDir)\content\ClientResources\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(Views)" DestinationFiles="@(Views -> '$(TmpOutDir)\content\Views\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!-- Create the Zip file -->
+    <ZipDirectory InputPath="$(TmpOutDir)\content" OutputFileName="$(zipFile)" OverwriteExistingFile="true" />
+    <!-- Create the package -->
+    <Exec Command="$(NugetCommand)" />
+    <!-- Cleanup -->
+    <RemoveDir Directories="$(TmpOutDir)" />
+    <Delete Files="$(zipFile)" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

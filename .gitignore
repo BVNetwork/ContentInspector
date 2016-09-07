@@ -6,3 +6,5 @@ packages/
 obj/
 .vs/config/applicationhost.config
 .vs/BVNetwork.ContentAreaInspector/v14/.suo
+bin/
+*.nupkg

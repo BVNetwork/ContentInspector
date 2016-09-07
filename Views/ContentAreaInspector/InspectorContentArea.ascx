@@ -15,7 +15,7 @@ foreach (var item in Model)
                    <% foreach (var subItem in item.ContentAreaItems)
                     { %>
                 
-                       <% Html.RenderPartial(Paths.ToResource("ContentAreaInspector","Views/ContentAreaInspector/InspectorContent.ascx"), subItem, new ViewDataDictionary{{"group",previousContentGroup}});%> 
+                       <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorContent.ascx"), subItem, new ViewDataDictionary{{"group",previousContentGroup}});%> 
                        <% {
                             previousContentGroup = subItem.ContentGroup;
                         } 

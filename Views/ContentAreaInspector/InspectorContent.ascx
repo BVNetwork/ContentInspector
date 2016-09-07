@@ -64,7 +64,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
                         </span>
                     </li>
                     <li>Type: <%:Model.Content.Type %></li>
-           <% Html.RenderPartial(Paths.ToResource("ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content.Status);%> 
+           <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content.Status);%> 
                     <%if (Model.Content.IsMaxLevel)
                     { %>
                         <li><i>Content has sub items, but the inspector will only show 10 sub item levels. Please edit and inspect a sub item to see additional levels</i></li>
@@ -77,7 +77,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
             </span>
         </li>
 
-        <% Html.RenderPartial(Paths.ToResource("ContentAreaInspector","Views/ContentAreaInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%> 
+        <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%> 
         <%if (Model.ContentReferenceItems != null && Model.ContentReferenceItems.Any())
         {
             foreach (var contentReferenceViewModel in Model.ContentReferenceItems)
@@ -85,7 +85,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
                 <li>
                     <div class="inspector_property">
                         [Content reference]<i> <%:contentReferenceViewModel.Name %></i> value:
-                         <% Html.RenderPartial(Paths.ToResource("ContentAreaInspector", "Views/ContentAreaInspector/InspectorContent.ascx"), contentReferenceViewModel.ContentReferenceItem); %> 
+                         <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector", "Views/ContentAreaInspector/InspectorContent.ascx"), contentReferenceViewModel.ContentReferenceItem); %> 
 
                     </div>
                 </li>

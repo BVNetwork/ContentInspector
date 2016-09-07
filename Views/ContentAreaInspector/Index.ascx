@@ -7,11 +7,11 @@
     <div class="inspector_main">
         <ul>
             <li>Type: <%: Model.Content.Type %></li>
-             <% Html.RenderPartial(Paths.ToResource("ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content.Status);%> 
+             <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content.Status);%> 
         </ul>
     </div>
     <ul class="inspector">
-        <% Html.RenderPartial(Paths.ToResource("ContentAreaInspector","Views/ContentAreaInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%> 
+        <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%> 
         <%if (Model.ContentReferenceItems != null && Model.ContentReferenceItems.Any())
         {
             foreach (var contentReference in Model.ContentReferenceItems)
@@ -20,7 +20,7 @@
                     <div class="inspector_property">[Content reference]<i> <%:contentReference.Name %></i>  value:</div>
                     <div class="inspector_content_area">
                         <div>
-                              <% Html.RenderPartial("InspectorContent", contentReference.ContentReferenceItem); %> 
+                              <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorContent.ascx"), contentReference.ContentReferenceItem); %> 
                         </div>
                     </div>
                 </li>
