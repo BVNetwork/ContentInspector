@@ -20,6 +20,11 @@ li.inspectoritem>span:hover .inspector_preview_button {
     
 }
 
+li.inspector_main_preview:hover .inspector_preview_button {
+    display: block;
+    
+}
+
 
 .inspector_scheduled {
     background-color: #ffee25;
@@ -95,6 +100,20 @@ li.inspectoritem>span:hover .inspector_preview_button {
 
     .inspector_group ul:last-child {
         margin-bottom: 0px;
+    }
+
+    .inspector_group>ul {
+    margin-bottom: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    }
+    .inspector_group>ul:first-child {
+    margin-bottom: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    border-right: 0px;
+        border-top: 0;
     }
 
 li.inspector_area {

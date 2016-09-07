@@ -14,6 +14,7 @@ namespace BVNetwork.ContentAreaInspector
         public class InspectorContentViewModel
         {
             public string Name { get; set; }
+            public string PublishedDate { get; set; }
             public string Id { get; set; }
             public VersionStatus Status { get; set; }
             public string Type { get; set; }
