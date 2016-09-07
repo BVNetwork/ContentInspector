@@ -185,10 +185,16 @@
     <None Include="packages.config" />
     <None Include="packageTools.targets" />
     <None Include="Views\ContentAreaInspector\Index.cshtml" />
-    <Content Include="Views\ContentAreaInspector\Index.ascx" />
+    <Content Include="Views\ContentAreaInspector\Index.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Views\ContentAreaInspector\InspectorStatus.ascx" />
-    <Content Include="Views\ContentAreaInspector\InspectorContent.ascx" />
-    <Content Include="Views\ContentAreaInspector\InspectorContentArea.ascx" />
+    <Content Include="Views\ContentAreaInspector\InspectorContent.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Views\ContentAreaInspector\InspectorContentArea.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

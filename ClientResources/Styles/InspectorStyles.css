@@ -20,6 +20,11 @@ li.inspectoritem>span:hover .inspector_preview_button {
     
 }
 
+li.inspector_main_preview:hover .inspector_preview_button {
+    display: block;
+    
+}
+
 
 .inspector_scheduled {
     background-color: #ffee25;

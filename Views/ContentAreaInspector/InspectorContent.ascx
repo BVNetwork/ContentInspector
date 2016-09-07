@@ -65,6 +65,10 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
                     </li>
                     <li>Type: <%:Model.Content.Type %></li>
            <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content.Status);%> 
+                                  <%   foreach (var additionalProperty in Model.Content.AdditionalProperties)
+    {%>
+        <li><%:additionalProperty.Key %>: <i><%:additionalProperty.Value %></i></li>
+    <%} %>
                     <%if (Model.Content.IsMaxLevel)
                     { %>
                         <li><i>Content has sub items, but the inspector will only show 10 sub item levels. Please edit and inspect a sub item to see additional levels</i></li>

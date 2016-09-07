@@ -6,8 +6,14 @@
 <div class="inspector_container">
     <div class="inspector_main">
         <ul>
-            <li>Type: <%: Model.Content.Type %></li>
+            <li class="inspector_main_preview">Type: <%: Model.Content.Type %>   <span data-type="<%:Model.Content.MainType %>" data-previewUrl="<%: Model.Content.PreviewUrl%>" class="inspector_preview_button dijitReset dijitInline dijitIcon epi-icon--medium epi-iconPreview">
+                        </span></li>
              <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content.Status);%> 
+              <%   foreach (var additionalProperty in Model.Content.AdditionalProperties)
+    {%>
+        <li><%:additionalProperty.Key %>: <i><%:additionalProperty.Value %></i></li>
+    <%} %>
+                 
         </ul>
     </div>
     <ul class="inspector">
