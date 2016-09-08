@@ -16,6 +16,8 @@
 
     return declare([_Command], {
 
+        rasterizeBaseUrl: "",
+
         label: "Inspect current content",
 
         iconClass: "epi-iconSearch",
@@ -23,7 +25,9 @@
         canExecute: true,
 
         _execute: function () {
-            new InspectDialog()._createTooltip(this.model.contentData);
+            var inspectDialog = new InspectDialog();
+            inspectDialog.rasterizeBaseUrl = this.rasterizeBaseUrl;    
+            inspectDialog._createTooltip(this.model.contentData);
         }
     });
 });

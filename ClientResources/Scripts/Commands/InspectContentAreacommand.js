@@ -27,9 +27,10 @@
         //      A category which hints that this item should be displayed with a separator.
         category: "menuWithSeparator",
 
-        constructor: function () {
+        constructor: function (settings) {
             this.contentActionSupport = this.contentActionSupport || ContentActionSupport;
             this.inspectDialog = new InspectDialog();
+            this.inspectDialog.rasterizeBaseUrl = settings.rasterizeBaseUrl;
         },
 
         _execute: function () {

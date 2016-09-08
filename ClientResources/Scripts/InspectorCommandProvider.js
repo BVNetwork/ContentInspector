@@ -8,7 +8,6 @@
     "epi/shell/selection",
     "epi-cms/widget/ContentTreeStoreModel",
     "epi-cms/widget/ContentTreeModelConfirmation",
-    "epi-cms/command/DeleteContent",
     "contentinspector/Commands/InspectCommand"
 ], function (
     dojo,
@@ -20,32 +19,13 @@
     Selection,
     ContentTreeStoreModel,
     ContentTreeModelConfirmation,
-    DeleteContent,
-    Inspect
+    InspectCommand
 ) {
     return declare([_CommandProviderMixin], {
 
-        constructor: function () {
+        constructor: function (settings) {
             this.inherited(arguments);
-
-            this._clipboardManager = new ClipboardManager();
-            this._selection = new Selection();
-
-            this._settings = {
-                model: new ContentTreeModelConfirmation(new ContentTreeStoreModel()),
-                clipboard: this._clipboardManager,
-                selection: this._selection
-            };
-
-            this._deleteCommand = new DeleteContent(this._settings);
-            this.add("commands", new Inspect(this._settings));
+            this.add("commands", new InspectCommand(settings));
         }
-
-        //updateCommandModel: function (content) {
-
-        //    //var selected = [{ type: "epi.cms.contentdata", data: content.contentData }];
-        //    //this._selection.set("data", selected);
-        //    this._deleteCommand.set("isAvailable", true);
-        //}
     });
 });

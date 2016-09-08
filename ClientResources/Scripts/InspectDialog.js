@@ -10,16 +10,21 @@
      "dojo/query",
     "dijit/Dialog",
      "dijit/TooltipDialog",
-    "contentinspector/rasterizeHTML.allinone"
+    "contentinspector/rasterizeHTML.allinone",
+    "epi-cms/ApplicationSettings"
 ], function (
     declare,
     promiseAll,
     topic,
     when,on, dom, attr, popup, query, Dialog, TooltipDialog,
-    rasterizeHtml
+    rasterizeHtml, ApplicationSettings
 ) {
     return declare([], {
+
+        rasterizeBaseUrl:"",
+
         _createTooltip: function (model) {
+            var self = this;
             var dialog = new Dialog({
                 title: model.name,
                 style: "min-width:600px;",
@@ -65,7 +70,7 @@
                             previewContent.width = 500;
                             var context = previewContent.getContext("2d");
                             context.scale(0.5, 0.5);
-                            rasterizeHtml.drawURL(previewUrl, previewContent, { height: 800, width: 1000 }).then(function success(renderResult) {
+                            rasterizeHtml.drawURL(previewUrl, previewContent, { height: 800, width: 1000, baseUrl: self.rasterizeBaseUrl }).then(function success(renderResult) {
                                 previewTooltip.set("content", previewContent);
                             });
                         }
