@@ -171,9 +171,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientResources\Scripts\Commands\InspectCommand.js" />
     <Content Include="ClientResources\Scripts\Commands\Inspect.js" />
+    <Content Include="ClientResources\Scripts\Commands\RefreshTreeNode.js" />
     <Content Include="ClientResources\Scripts\ContentAreaCommands.js" />
     <Content Include="ClientResources\Scripts\Initializer.js" />
+    <Content Include="ClientResources\Scripts\InspectorCommandProvider.js" />
     <Content Include="ClientResources\Scripts\rasterizeHTML.allinone.js" />
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
   </ItemGroup>
@@ -188,15 +191,9 @@
     <None Include="packages.config" />
     <None Include="packageTools.targets" />
     <None Include="Views\ContentAreaInspector\Index.cshtml" />
-    <Content Include="Views\ContentAreaInspector\Index.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
-    <Content Include="Views\ContentAreaInspector\InspectorStatus.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
-    <Content Include="Views\ContentAreaInspector\InspectorContent.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
+    <Content Include="Views\ContentAreaInspector\Index.ascx" />
+    <Content Include="Views\ContentAreaInspector\InspectorStatus.ascx" />
+    <Content Include="Views\ContentAreaInspector\InspectorContent.ascx" />
     <Content Include="Views\ContentAreaInspector\InspectorContentArea.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>

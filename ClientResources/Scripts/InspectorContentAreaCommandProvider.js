@@ -1,13 +1,13 @@
 ﻿define([
-    "dojo/_base/lang",
-    "epi-cms/contentediting/command/ContentAreaCommands",
-    "epi-cms/contentediting/editors/ContentAreaEditor",
-    "contentareainspector/Commands/Inspect"
+   "dojo/_base/lang",
+   "epi-cms/contentediting/command/ContentAreaCommands",
+   "epi-cms/contentediting/editors/ContentAreaEditor",
+   "contentareainspector/Commands/InspectContentAreaCommand"
 ], function (
-    lang,
-    ContentAreaCommands,
-    ContentAreaEditor,
-    Inspect
+   lang,
+   ContentAreaCommands,
+   ContentAreaEditor,
+   Inspect
 ) {
 
     // Override content area commands for on-page editing

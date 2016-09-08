@@ -16,8 +16,9 @@ namespace BVNetwork.ContentAreaInspector
             _contentAreaInspectorService = contentAreaInspectorService;
         }
 
-        public ActionResult Index(int id)
+        public ActionResult Index(string id)
         {
+            
             if (!PrincipalInfo.HasEditAccess)
             {
                 throw new SecurityException("Access denied");
