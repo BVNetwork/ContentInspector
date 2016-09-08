@@ -1,6 +1,7 @@
-﻿@using BVNetwork.ContentAreaInspector
+﻿@using BVNetwork.ContentInspector
+@using BVNetwork.ContentInspector.Models
 @using EPiServer.Core
-@model BVNetwork.ContentAreaInspector.ContentAreaInspectorViewModel
+@model BVNetwork.ContentInspector.Models.ContentInspectorViewModel
 @{
     ViewBag.Title = "title";
     Layout = null;
@@ -33,7 +34,7 @@
 </div>
 
 
-@helper RenderContentArea(List<ContentAreaInspectorViewModel.ContentAreaItemViewModel> items)
+@helper RenderContentArea(List<ContentInspectorViewModel.ContentAreaItemViewModel> items)
 {
 var previousContentGroup = "";
 foreach (var item in items)
@@ -57,7 +58,7 @@ foreach (var item in items)
 }
 
 
-@helper RenderContent(ContentAreaInspectorViewModel inspectorViewModel, string previousContentGroup)
+@helper RenderContent(ContentInspectorViewModel inspectorViewModel, string previousContentGroup)
 {
 if (!string.IsNullOrEmpty(previousContentGroup) && string.IsNullOrEmpty(inspectorViewModel.ContentGroup))
 {

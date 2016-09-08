@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BVNetwork.ContentAreaInspector")]
-[assembly: AssemblyDescription("See https://github.com/BVNetwork/ContentAreaInspector ")]
+[assembly: AssemblyTitle("BVNetwork.ContentInspector")]
+[assembly: AssemblyDescription("See https://github.com/BVNetwork/ContentInspector ")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BV Network AS")]
 [assembly: AssemblyProduct("")]

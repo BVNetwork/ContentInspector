@@ -1,5 +1,5 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ContentAreaInspectorViewModel.InspectorContentViewModel>" %>
-<%@ Import Namespace="BVNetwork.ContentAreaInspector" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ContentInspectorViewModel.InspectorContentViewModel>" %>
+<%@ Import Namespace="BVNetwork.ContentInspector.Models" %>
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.Shell" %>
 

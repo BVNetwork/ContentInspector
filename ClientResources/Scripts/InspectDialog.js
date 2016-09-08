@@ -10,7 +10,7 @@
      "dojo/query",
     "dijit/Dialog",
      "dijit/TooltipDialog",
-    "contentareainspector/rasterizeHTML.allinone"
+    "contentinspector/rasterizeHTML.allinone"
 ], function (
     declare,
     promiseAll,
@@ -24,7 +24,7 @@
                 title: model.name,
                 style: "min-width:600px;",
                 class: "inspector_dialog",
-                href: "/contentareainspector/" + model.contentLink
+                href: "/ContentInspector/" + model.contentLink
             });
 
             dialog.set('onDownloadEnd', function () {

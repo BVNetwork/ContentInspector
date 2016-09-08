@@ -7,7 +7,7 @@
     "epi/dependency",
     "epi-cms/contentediting/command/_ContentAreaCommand",
     "epi-cms/contentediting/ContentActionSupport",
-    "contentareainspector/InspectDialog"
+    "contentinspector/InspectDialog"
 ], function (declare, lang,  topic, when, epi, dependency, _ContentAreaCommand, ContentActionSupport, InspectDialog) {
 
     return declare([_ContentAreaCommand], {

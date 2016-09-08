@@ -5,15 +5,15 @@ using EPiServer.Core;
 using EPiServer.Security;
 using EPiServer.Shell;
 
-namespace BVNetwork.ContentAreaInspector
+namespace BVNetwork.ContentInspector
 {
     [Authorize]
-    public class ContentAreaInspectorController : Controller
+    public class ContentInspectorController : Controller
     {
-        private readonly IContentAreaInspectorService _contentAreaInspectorService;
-        public ContentAreaInspectorController(IContentAreaInspectorService contentAreaInspectorService)
+        private readonly IContentInspectorService _ContentInspectorService;
+        public ContentInspectorController(IContentInspectorService ContentInspectorService)
         {
-            _contentAreaInspectorService = contentAreaInspectorService;
+            _ContentInspectorService = ContentInspectorService;
         }
 
         public ActionResult Index(string id)
@@ -23,9 +23,9 @@ namespace BVNetwork.ContentAreaInspector
             {
                 throw new SecurityException("Access denied");
             }
-            var model = _contentAreaInspectorService.CreateModel(new ContentReference(id), null, null, 0, new List<ContentReference>());
+            var model = _ContentInspectorService.CreateModel(new ContentReference(id), null, null, 0, new List<ContentReference>());
             return View(Paths.ToResource(this.GetType(),
-                "Views/ContentAreaInspector/Index.ascx"), model);
+                "Views/ContentInspector/Index.ascx"), model);
         }
     }
 }

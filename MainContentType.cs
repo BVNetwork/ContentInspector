@@ -1,4 +1,4 @@
-﻿namespace BVNetwork.ContentAreaInspector
+﻿namespace BVNetwork.ContentInspector
 {
     public enum MainContentType
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{A7184379-113C-4129-B1A3-B95EFAE30D5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BVNetwork.ContentAreaInspector</RootNamespace>
-    <AssemblyName>BVNetwork.ContentAreaInspector</AssemblyName>
+    <RootNamespace>BVNetwork.ContentInspector</RootNamespace>
+    <AssemblyName>BVNetwork.ContentInspector</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -161,21 +161,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentAreaInspectorService.cs" />
-    <Compile Include="IContentAreaInspectorService.cs" />
+    <Compile Include="ContentInspectorService.cs" />
+    <Compile Include="IContentInspectorService.cs" />
     <Compile Include="Inspectable.cs" />
     <Compile Include="MainContentType.cs" />
-    <Compile Include="Models\ContentAreaInspectorViewModel.cs" />
+    <Compile Include="Models\ContentInspectorViewModel.cs" />
     <Compile Include="Initialization.cs" />
     <Compile Include="InspectorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientResources\Scripts\Commands\InspectCommand.js" />
-    <Content Include="ClientResources\Scripts\Commands\Inspect.js" />
-    <Content Include="ClientResources\Scripts\Commands\RefreshTreeNode.js" />
-    <Content Include="ClientResources\Scripts\ContentAreaCommands.js" />
+    <Content Include="ClientResources\Scripts\Commands\InspectContentAreaCommand.js" />
+    <Content Include="ClientResources\Scripts\InspectorContentAreaCommandProvider.js" />
     <Content Include="ClientResources\Scripts\Initializer.js" />
+    <Content Include="ClientResources\Scripts\InspectDialog.js" />
     <Content Include="ClientResources\Scripts\InspectorCommandProvider.js" />
     <Content Include="ClientResources\Scripts\rasterizeHTML.allinone.js" />
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
@@ -190,13 +190,11 @@
     </None>
     <None Include="packages.config" />
     <None Include="packageTools.targets" />
-    <None Include="Views\ContentAreaInspector\Index.cshtml" />
-    <Content Include="Views\ContentAreaInspector\Index.ascx" />
-    <Content Include="Views\ContentAreaInspector\InspectorStatus.ascx" />
-    <Content Include="Views\ContentAreaInspector\InspectorContent.ascx" />
-    <Content Include="Views\ContentAreaInspector\InspectorContentArea.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
+    <None Include="Views\ContentInspector\Index.cshtml" />
+    <Content Include="Views\ContentInspector\Index.ascx" />
+    <Content Include="Views\ContentInspector\InspectorStatus.ascx" />
+    <Content Include="Views\ContentInspector\InspectorContent.ascx" />
+    <Content Include="Views\ContentInspector\InspectorContentArea.ascx" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

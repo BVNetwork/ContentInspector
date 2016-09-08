@@ -1,5 +1,5 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<BVNetwork.ContentAreaInspector.ContentAreaInspectorViewModel>" %>
-<%@ Import Namespace="BVNetwork.ContentAreaInspector" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<BVNetwork.ContentInspector.Models.ContentInspectorViewModel>" %>
+<%@ Import Namespace="BVNetwork.ContentInspector.Models" %>
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.Shell" %>
 
@@ -9,7 +9,7 @@
             <li class="inspector_main_preview">Type: <%: Model.Content.Type %>   <span data-type="<%:Model.Content.MainType %>" data-previewUrl="<%: Model.Content.PreviewUrl%>" class="inspector_preview_button dijitReset dijitInline dijitIcon epi-icon--medium epi-iconPreview">
                         </span></li>
          
-             <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorStatus.ascx"), Model.Content);%> 
+             <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentInspector","Views/ContentInspector/InspectorStatus.ascx"), Model.Content);%> 
         
               <%   foreach (var additionalProperty in Model.Content.AdditionalProperties)
     {%>
@@ -19,7 +19,7 @@
         </ul>
     </div>
     <ul class="inspector">
-        <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%> 
+        <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentInspector","Views/ContentInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%> 
         <%if (Model.ContentReferenceItems != null && Model.ContentReferenceItems.Any())
         {
             foreach (var contentReference in Model.ContentReferenceItems)
@@ -28,7 +28,7 @@
                     <div class="inspector_property">[Content reference]<i> <%:contentReference.Name %></i>  value:</div>
                     <div class="inspector_content_area">
                         <div>
-                              <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentAreaInspector","Views/ContentAreaInspector/InspectorContent.ascx"), contentReference.ContentReferenceItem); %> 
+                              <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentInspector","Views/ContentInspector/InspectorContent.ascx"), contentReference.ContentReferenceItem); %> 
                         </div>
                     </div>
                 </li>

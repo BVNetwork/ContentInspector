@@ -2,7 +2,7 @@
    "dojo/_base/lang",
    "epi-cms/contentediting/command/ContentAreaCommands",
    "epi-cms/contentediting/editors/ContentAreaEditor",
-   "contentareainspector/Commands/InspectContentAreaCommand"
+   "contentinspector/Commands/InspectContentAreaCommand"
 ], function (
    lang,
    ContentAreaCommands,

@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace BVNetwork.ContentAreaInspector
+namespace BVNetwork.ContentInspector
 {
     /// <summary>
-    /// Mark the property as inspectable for the ContentAreaInspector
+    /// Mark the property as inspectable for the ContentInspector
     /// </summary>
     public class InspectableAttribute : Attribute
     {

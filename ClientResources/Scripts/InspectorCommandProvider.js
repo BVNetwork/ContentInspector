@@ -9,7 +9,7 @@
     "epi-cms/widget/ContentTreeStoreModel",
     "epi-cms/widget/ContentTreeModelConfirmation",
     "epi-cms/command/DeleteContent",
-    "contentareainspector/Commands/InspectCommand"
+    "contentinspector/Commands/InspectCommand"
 ], function (
     dojo,
     declare,

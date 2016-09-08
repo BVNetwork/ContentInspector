@@ -1,8 +1,8 @@
 ﻿define([
     "dojo/_base/declare",
     "epi/_Module",'epi/dependency',
-    "contentareainspector/InspectorContentAreaCommandProvider",
-    "contentareainspector/InspectorCommandProvider"
+    "contentinspector/InspectorContentAreaCommandProvider",
+    "contentinspector/InspectorCommandProvider"
 ], function (declare, _Module,dependency,ContentAreaCommands, InspectorCommandProvider) {
 
     return declare([_Module],

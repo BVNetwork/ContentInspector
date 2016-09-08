@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>BVNetwork.ContentAreaInspector</id>
+        <id>BVNetwork.ContentInspector</id>
         <title>Content Area Inspector</title>
         <version>0.9.0</version>
         <authors>Per Magne Skuseth</authors>
         <owners>BV Network</owners>
         <licenseUrl>https://www.coderesort.com/p/epicode/wiki/EpicodeLicense</licenseUrl>
-        <projectUrl>https://github.com/BVNetwork/ContentAreaInspector</projectUrl>
+        <projectUrl>https://github.com/BVNetwork/ContentInspector</projectUrl>
         <iconUrl>http://www.coderesort.com/favicon.ico</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Adds a new menu item to content area items which will let you inspect the content, giving you and overview of nested content with previews</description>
@@ -19,7 +19,7 @@
       </dependencies>
     </metadata>
     <files>
-        <file src="bin\$configuration$\BVNetwork.ContentAreaInspector.dll" target="lib\net45\" />  
-        <file src="bin\$configuration$\BVNetwork.ContentAreaInspector.zip" target="content\modules\_protected\BVNetwork.ContentAreaInspector\" />
+        <file src="bin\$configuration$\BVNetwork.ContentInspector.dll" target="lib\net45\" />  
+        <file src="bin\$configuration$\BVNetwork.ContentInspector.zip" target="content\modules\_protected\BVNetwork.ContentInspector\" />
     </files>
 </package>

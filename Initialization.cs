@@ -3,7 +3,7 @@ using System.Web.Routing;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 
-namespace BVNetwork.ContentAreaInspector
+namespace BVNetwork.ContentInspector
 {
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
@@ -12,9 +12,9 @@ namespace BVNetwork.ContentAreaInspector
         public void Initialize(InitializationEngine context)
         {
             RouteTable.Routes.MapRoute(
-                "ContentAreaInspector",
-                "ContentAreaInspector/{id}",
-                new { controller = "ContentAreaInspector", action = "Index" }  
+                "ContentInspector",
+                "ContentInspector/{id}",
+                new { controller = "ContentInspector", action = "Index" }  
             );
         }
 

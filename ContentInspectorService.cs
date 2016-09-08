@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using BVNetwork.ContentInspector.Models;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -11,12 +12,12 @@ using EPiServer.Personalization.VisitorGroups;
 using EPiServer.ServiceLocation;
 using EPiServer.SpecializedProperties;
 
-namespace BVNetwork.ContentAreaInspector
+namespace BVNetwork.ContentInspector
 {
-    [ServiceConfiguration(typeof(IContentAreaInspectorService))]
-    public class ContentAreaInspectorService : IContentAreaInspectorService
+    [ServiceConfiguration(typeof(IContentInspectorService))]
+    public class ContentInspectorService : IContentInspectorService
     {
-        public ContentAreaInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames, string contentGroup,
+        public ContentInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames, string contentGroup,
             int level, List<ContentReference> parentIds)
         {
             level++;
@@ -27,7 +28,7 @@ namespace BVNetwork.ContentAreaInspector
             var status = versionAble?.Status ?? VersionStatus.Published;
             var publishedDate = versionAble?.StartPublish?.ToString("g",
                   DateTimeFormatInfo.InvariantInfo);
-            var currentItem = new ContentAreaInspectorViewModel.InspectorContentViewModel()
+            var currentItem = new ContentInspectorViewModel.InspectorContentViewModel()
             {
                 Name = content.Name,
                 Id = content.ContentLink.ID.ToString(),
@@ -59,13 +60,13 @@ namespace BVNetwork.ContentAreaInspector
             else
                 currentItem.MainType = MainContentType.Page;
 
-            var model = new ContentAreaInspectorViewModel()
+            var model = new ContentInspectorViewModel()
             {
                 Content = currentItem,
                 VisitorGroupsNames = visitorGroupNames,
-                ContentAreaItems = new List<ContentAreaInspectorViewModel.ContentAreaItemViewModel>(),
+                ContentAreaItems = new List<ContentInspectorViewModel.ContentAreaItemViewModel>(),
                 ContentGroup = contentGroup,
-                ContentReferenceItems = new List<ContentAreaInspectorViewModel.ContentReferenceViewModel>()
+                ContentReferenceItems = new List<ContentInspectorViewModel.ContentReferenceViewModel>()
             };
             if (level >= 10)
             {
@@ -83,10 +84,10 @@ namespace BVNetwork.ContentAreaInspector
                     {
                         return model;
                     }
-                    var contentAreaViewModel = new ContentAreaInspectorViewModel.ContentAreaItemViewModel
+                    var contentAreaViewModel = new ContentInspectorViewModel.ContentAreaItemViewModel
                     {
                         Name = prop.Name,
-                        ContentAreaItems = new List<ContentAreaInspectorViewModel>()
+                        ContentAreaItems = new List<ContentInspectorViewModel>()
                     };
                     var contentArea = (nestedContentArea.Value as ContentArea);
                     for (int i = 0; i < (nestedContentArea.Value as ContentArea).Count; i++)
@@ -124,7 +125,7 @@ namespace BVNetwork.ContentAreaInspector
                             var contentReferenceItem = CreateModel(contentReferenceSubItem, null, null, level,
                                 new List<ContentReference>(parentIds));
 
-                            var contentReferenceViewModel = new ContentAreaInspectorViewModel.ContentReferenceViewModel()
+                            var contentReferenceViewModel = new ContentInspectorViewModel.ContentReferenceViewModel()
                             {
 
                                 Name = contentReferenceProperty.TranslateDisplayName() ?? propertyInfo.Name,

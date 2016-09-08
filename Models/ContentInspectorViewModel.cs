@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using EPiServer.Core;
 
-namespace BVNetwork.ContentAreaInspector
+namespace BVNetwork.ContentInspector.Models
 {
-    public class ContentAreaInspectorViewModel
+    public class ContentInspectorViewModel
     {
         public InspectorContentViewModel Content { get; set; }
         public List<string> VisitorGroupsNames { get; set; }
@@ -32,14 +32,14 @@ namespace BVNetwork.ContentAreaInspector
         public class ContentAreaItemViewModel
         {
             public string Name { get; set; }
-            public List<ContentAreaInspectorViewModel> ContentAreaItems { get; set; }
+            public List<ContentInspectorViewModel> ContentAreaItems { get; set; }
         }
 
 
         public class ContentReferenceViewModel
         {
             public string Name { get; set; }
-            public ContentAreaInspectorViewModel ContentReferenceItem { get; set; }
+            public ContentInspectorViewModel ContentReferenceItem { get; set; }
         }
     }
 

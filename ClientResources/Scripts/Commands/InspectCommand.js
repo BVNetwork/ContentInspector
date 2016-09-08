@@ -4,7 +4,7 @@
     "dojo/promise/all",
     "epi/shell/command/_Command",
     "epi-cms/_ContentContextMixin",
-    "contentareainspector/InspectDialog"
+    "contentinspector/InspectDialog"
 ], function (
     declare,
     lang,
