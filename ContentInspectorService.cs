@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using BVNetwork.ContentInspector.Models;
 using EPiServer;
 using EPiServer.Cms.Shell;
@@ -17,29 +19,22 @@ namespace BVNetwork.ContentInspector
     [ServiceConfiguration(typeof(IContentInspectorService))]
     public class ContentInspectorService : IContentInspectorService
     {
+        private readonly int _maxLevel;
+        private readonly IContentLoader _contentLoader;
+
+        public ContentInspectorService()
+        {
+            var maxLevel = ConfigurationManager.AppSettings["ContentInspector.MaxLevel"];
+            _maxLevel = Convert.ToInt32(!string.IsNullOrEmpty(maxLevel) ? maxLevel : "10");
+            _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+        }
+
         public ContentInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames, string contentGroup,
             int level, List<ContentReference> parentIds)
         {
             level++;
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            var content = contentLoader.Get<IContent>(contentReference);
-
-            var versionAble = content as IVersionable;
-            var status = versionAble?.Status ?? VersionStatus.Published;
-            var publishedDate = versionAble?.StartPublish?.ToString("g",
-                  DateTimeFormatInfo.InvariantInfo);
-            var currentItem = new ContentInspectorViewModel.InspectorContentViewModel()
-            {
-                Name = content.Name,
-                Id = content.ContentLink.ID.ToString(),
-                Status = status,
-                Type = content.GetOriginalType().Name,
-                PreviewUrl = content.PreviewUrl(),
-                AdditionalProperties = new Dictionary<string, object>(),
-                PublishedDate = publishedDate
-
-            };
-           
+            var content = _contentLoader.Get<IContent>(contentReference);
+            var currentItem = CreateInspectorContentViewModel(content);
             if (parentIds.Contains(contentReference))
             {
                 currentItem.HasDuplicateParent = true;
@@ -48,7 +43,6 @@ namespace BVNetwork.ContentInspector
             {
                 parentIds.Add(contentReference);
             }
-
             currentItem.EditUrl = PageEditing.GetEditUrl(content.ContentLink);
             if (content is ImageData)
             {
@@ -68,22 +62,92 @@ namespace BVNetwork.ContentInspector
                 ContentGroup = contentGroup,
                 ContentReferenceItems = new List<ContentInspectorViewModel.ContentReferenceViewModel>()
             };
-            if (level >= 10)
-            {
-                model.Content.IsMaxLevel = true;
-            }
+
             var contentType = ServiceLocator.Current.GetInstance<IContentTypeRepository>().Load(content.ContentTypeID);
 
             // Get content area properties
+            if (level >= _maxLevel)
+            {
+                model.Content.IsMaxLevel = true;
+            }
+            else if (!currentItem.HasDuplicateParent)
+            {
+                model.ContentAreaItems = GetContentAreaItems(level, parentIds, contentType, content); ;
+            }
+            var inspectablePropertes = GetInspectableProperties(contentType);
+            foreach (var propertyInfo in inspectablePropertes)
+            {
+                if (propertyInfo.PropertyType == typeof(ContentReference) ||
+                    propertyInfo.PropertyType == typeof(PageReference))
+                {
+                    var contentReferenceProperty = content.Property[propertyInfo.Name] as PropertyContentReference;
+                    var contentReferenceSubItem = contentReferenceProperty?.Value as ContentReference;
+                    if (contentReferenceSubItem != null)
+                    {
+                        if (!model.Content.IsMaxLevel && !model.Content.HasDuplicateParent)
+                        {
+                            var contentReferenceItem = CreateModel(contentReferenceSubItem, null, null, level,
+                                new List<ContentReference>(parentIds));
+                            var contentReferenceViewModel = new ContentInspectorViewModel.ContentReferenceViewModel()
+                            {
+                                Name = contentReferenceProperty.TranslateDisplayName() ?? propertyInfo.Name,
+                                ContentReferenceItem = contentReferenceItem
+                            };
+                            model.ContentReferenceItems.Add(contentReferenceViewModel);
+                        }
+                    }
+                }
+                else
+                {
+                    var property = content.Property[propertyInfo.Name];
+                    model.Content.AdditionalProperties.Add(property.TranslateDisplayName(), property.Value);
+                }
+            }
+            return model;
+        }
+
+        public virtual ContentInspectorViewModel.InspectorContentViewModel CreateInspectorContentViewModel(IContent content)
+        {
+            var versionAble = content as IVersionable;
+            var currentItem = new ContentInspectorViewModel.InspectorContentViewModel()
+            {
+                Name = content.Name,
+                Id = content.ContentLink.ID.ToString(),
+                Status = versionAble?.Status ?? VersionStatus.Published,
+                Type = content.GetOriginalType().Name,
+                PreviewUrl = content.PreviewUrl(),
+                AdditionalProperties = new Dictionary<string, object>(),
+                PublishedDate = versionAble?.StartPublish?.ToString("g",
+                    DateTimeFormatInfo.InvariantInfo)
+            };
+            return currentItem;
+        }
+
+        public virtual List<PropertyInfo> GetInspectableProperties(ContentType contentType)
+        {
+            var properties = contentType.ModelType.GetProperties();
+            List<PropertyInfo> inspectableProperties = new List<PropertyInfo>();
+            foreach (var propertyInfo in properties)
+            {
+                var inspectableAttribute =
+                    Attribute.GetCustomAttribute(propertyInfo, typeof(InspectableAttribute), true) as
+                        InspectableAttribute;
+                if (inspectableAttribute != null)
+                {
+                    inspectableProperties.Add(propertyInfo);
+                }
+            }
+            return inspectableProperties;
+        }
+
+        public virtual List<ContentInspectorViewModel.ContentAreaItemViewModel> GetContentAreaItems(int level, List<ContentReference> parentIds, ContentType contentType, IContent content)
+        {
+            var contentAreaItemViewModels = new List<ContentInspectorViewModel.ContentAreaItemViewModel>();
             foreach (var prop in contentType.PropertyDefinitions.Where(x => x.Type.Name == "ContentArea"))
             {
                 var nestedContentArea = content.Property[prop.Name] as PropertyContentArea;
                 if (nestedContentArea?.Value is ContentArea && (nestedContentArea.Value as ContentArea).Items != null)
                 {
-                    if (model.Content.IsMaxLevel || currentItem.HasDuplicateParent)
-                    {
-                        return model;
-                    }
                     var contentAreaViewModel = new ContentInspectorViewModel.ContentAreaItemViewModel
                     {
                         Name = prop.Name,
@@ -98,53 +162,14 @@ namespace BVNetwork.ContentInspector
                         contentAreaViewModel.ContentAreaItems.Add(CreateModel(contentAreaItem.ContentLink,
                             visitorGroups, contentAreaItem.ContentGroup, level, new List<ContentReference>(parentIds)));
                     }
-                    model.ContentAreaItems.Add(contentAreaViewModel);
+                    contentAreaItemViewModels.Add(contentAreaViewModel);
                 }
-            }
-            var properties = contentType.ModelType.GetProperties();
-            foreach (var propertyInfo in properties)
-            {
-                var inspectableAttribute =
-                    Attribute.GetCustomAttribute(propertyInfo, typeof(InspectableAttribute), true) as
-                        InspectableAttribute;
-                if (inspectableAttribute != null)
-                {
-                    if (propertyInfo.PropertyType == typeof(ContentReference) ||
-                        propertyInfo.PropertyType == typeof(PageReference))
-                    {
-                        var contentReferenceProperty = content.Property[propertyInfo.Name] as PropertyContentReference;
-                        var contentReferenceSubItem = contentReferenceProperty?.Value as ContentReference;
-                        if (contentReferenceSubItem != null)
-                        {
-                            if (level >= 10 || model.Content.IsMaxLevel)
-                            {
-                                return model;
-                            }
-                            if (currentItem.HasDuplicateParent)
-                                return model;
-                            var contentReferenceItem = CreateModel(contentReferenceSubItem, null, null, level,
-                                new List<ContentReference>(parentIds));
 
-                            var contentReferenceViewModel = new ContentInspectorViewModel.ContentReferenceViewModel()
-                            {
-
-                                Name = contentReferenceProperty.TranslateDisplayName() ?? propertyInfo.Name,
-                                ContentReferenceItem = contentReferenceItem
-                            };
-                            model.ContentReferenceItems.Add(contentReferenceViewModel);
-                        }
-                    }
-                    else
-                    {
-                        var property = content.Property[propertyInfo.Name];
-                        model.Content.AdditionalProperties.Add(property.TranslateDisplayName(), property.Value);
-                    }
-                }
             }
-            return model;
+            return contentAreaItemViewModels;
         }
 
-        public List<string> GetVisitorGroupNames(string internalFormat)
+        public virtual List<string> GetVisitorGroupNames(string internalFormat)
         {
             List<string> visitorGroups = new List<string>();
             var indexOfDataGroups = internalFormat.IndexOf("data-groups=\"");

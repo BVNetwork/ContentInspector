@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using System.Reflection;
 using BVNetwork.ContentInspector.Models;
 using EPiServer.Core;
+using EPiServer.DataAbstraction;
 
 namespace BVNetwork.ContentInspector
 {
     public interface IContentInspectorService
     {
-        ContentInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames,
-            string contentGroup,
-            int level, List<ContentReference> parentIds);
-
+        ContentInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames,string contentGroup,int level, List<ContentReference> parentIds);
         List<string> GetVisitorGroupNames(string internalFormat);
+        ContentInspectorViewModel.InspectorContentViewModel CreateInspectorContentViewModel(IContent content);
+        List<PropertyInfo> GetInspectableProperties(ContentType contentType);
+        List<ContentInspectorViewModel.ContentAreaItemViewModel> GetContentAreaItems(int level,List<ContentReference> parentIds, ContentType contentType, IContent content);
     }
 }
