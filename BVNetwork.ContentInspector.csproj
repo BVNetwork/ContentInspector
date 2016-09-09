@@ -183,7 +183,9 @@
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BVNetwork.ContentInspector.Version.targets" />
+    <None Include="BVNetwork.ContentInspector.Version.targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="BVNetwork.ContentInspector.nuspec" />
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />

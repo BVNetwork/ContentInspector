@@ -1,1 +1,3 @@
-# ContentAreaInspector
+# ContentInspector
+
+More to come.
