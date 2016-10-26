@@ -33,9 +33,13 @@
             this.inspectDialog.rasterizeBaseUrl = settings.rasterizeBaseUrl;
         },
 
-        _execute: function () {
+        _execute: function () {          
             var content = this.model;
             this.inspectDialog._createTooltip(content);
+        },
+
+        _onModelChange: function () {
+            this.set("canExecute", this.model.contentLink != null);
         }
     });
 });
