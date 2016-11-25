@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BVNetwork.ContentInspector
+namespace EPiCode.ContentInspector
 {
     /// <summary>
     /// Mark the property as inspectable for the ContentInspector

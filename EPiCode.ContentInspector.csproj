@@ -7,8 +7,8 @@
     <ProjectGuid>{A7184379-113C-4129-B1A3-B95EFAE30D5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BVNetwork.ContentInspector</RootNamespace>
-    <AssemblyName>BVNetwork.ContentInspector</AssemblyName>
+    <RootNamespace>EPiCode.ContentInspector</RootNamespace>
+    <AssemblyName>EPiCode.ContentInspector</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -183,10 +183,10 @@
     <Content Include="ClientResources\Styles\InspectorStyles.css" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BVNetwork.ContentInspector.Version.targets">
+    <None Include="EPiCode.ContentInspector.Version.targets">
       <SubType>Designer</SubType>
     </None>
-    <None Include="BVNetwork.ContentInspector.nuspec" />
+    <None Include="EPiCode.ContentInspector.nuspec" />
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="module.config">
@@ -210,7 +210,7 @@
   <PropertyGroup>
     <SolutionDir>$(ProjectDir)</SolutionDir>
     <!-- NOTE! This is different between cms versions, the zip file needs to be named the same in the package -->
-    <zipFile>$(OutDir)\BVNetwork.ContentInspector.zip</zipFile>
+    <zipFile>$(OutDir)\EPiCode.ContentInspector.zip</zipFile>
   </PropertyGroup>
   <!-- This holds the version of the package -->
   <Import Project="$(SolutionDir)\$(ProjectName).Version.targets" Condition="Exists('$(SolutionDir)\$(ProjectName).Version.targets')" />

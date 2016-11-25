@@ -3,7 +3,7 @@ using System.Web.Routing;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 
-namespace BVNetwork.ContentInspector
+namespace EPiCode.ContentInspector
 {
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]

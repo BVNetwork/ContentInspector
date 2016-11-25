@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
-using BVNetwork.ContentInspector.Models;
+using EPiCode.ContentInspector.Models;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 
-namespace BVNetwork.ContentInspector
+namespace EPiCode.ContentInspector
 {
     public interface IContentInspectorService
     {

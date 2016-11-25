@@ -1,4 +1,4 @@
-﻿namespace BVNetwork.ContentInspector
+﻿namespace EPiCode.ContentInspector
 {
     public enum MainContentType
     {

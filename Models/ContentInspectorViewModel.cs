@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using EPiServer.Core;
 
-namespace BVNetwork.ContentInspector.Models
+namespace EPiCode.ContentInspector.Models
 {
     public class ContentInspectorViewModel
     {

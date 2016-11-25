@@ -10,7 +10,7 @@ using EPiServer.Framework.TypeScanner;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Shell.Modules;
 
-namespace BVNetwork.ContentInspector
+namespace EPiCode.ContentInspector
 {
 
     public class ContentInspectorModule : EPiServer.Shell.Modules.ShellModule

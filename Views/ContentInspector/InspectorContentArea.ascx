@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<ContentInspectorViewModel.ContentAreaItemViewModel>>" %>
 <%@ Import Namespace="System.Web.Mvc" %>
-<%@ Import Namespace="BVNetwork.ContentInspector.Models" %>
+<%@ Import Namespace="EPiCode.ContentInspector.Models" %>
 <%@ Import Namespace="EPiServer.Shell" %>
 
 <%
@@ -15,7 +15,7 @@ foreach (var item in Model)
                    <% foreach (var subItem in item.ContentAreaItems)
                     { %>
                 
-                       <% Html.RenderPartial(Paths.ToResource("BVNetwork.ContentInspector","Views/ContentInspector/InspectorContent.ascx"), subItem, new ViewDataDictionary{{"group",previousContentGroup}});%> 
+                       <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorContent.ascx"), subItem, new ViewDataDictionary{{"group",previousContentGroup}});%> 
                        <% {
                             previousContentGroup = subItem.ContentGroup;
                         } 

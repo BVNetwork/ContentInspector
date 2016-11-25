@@ -5,7 +5,7 @@ using EPiServer.Core;
 using EPiServer.Security;
 using EPiServer.Shell;
 
-namespace BVNetwork.ContentInspector
+namespace EPiCode.ContentInspector
 {
     [Authorize]
     public class ContentInspectorController : Controller

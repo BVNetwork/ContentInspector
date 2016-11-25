@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BVNetwork.ContentInspector", "BVNetwork.ContentInspector.csproj", "{A7184379-113C-4129-B1A3-B95EFAE30D5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiCode.ContentInspector", "EPiCode.ContentInspector.csproj", "{A7184379-113C-4129-B1A3-B95EFAE30D5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

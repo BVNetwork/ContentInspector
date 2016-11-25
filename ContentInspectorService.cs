@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using BVNetwork.ContentInspector.Models;
+using EPiCode.ContentInspector.Models;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -14,7 +14,7 @@ using EPiServer.Personalization.VisitorGroups;
 using EPiServer.ServiceLocation;
 using EPiServer.SpecializedProperties;
 
-namespace BVNetwork.ContentInspector
+namespace EPiCode.ContentInspector
 {
     [ServiceConfiguration(typeof(IContentInspectorService))]
     public class ContentInspectorService : IContentInspectorService
