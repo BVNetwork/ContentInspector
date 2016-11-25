@@ -4,16 +4,19 @@
 
 <% var previousContentGroup = ViewBag.group;
 
-if (!string.IsNullOrEmpty(previousContentGroup) && string.IsNullOrEmpty(Model.ContentGroup))
+if (!string.IsNullOrEmpty(previousContentGroup) && string.IsNullOrEmpty(Model.ContentGroup)|| (!string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) && Model.ContentGroup != previousContentGroup ) )
 {
      %>
-        </div>
+         </div>
 <%} 
-if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup))
+if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) || (!string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) && Model.ContentGroup != previousContentGroup ) )
 {
     %>
-        <div class="inspector_group">
+
+         <div class="inspector_group">
     <%} %> 
+            
+            <% ViewBag.group = ""; %>
     <ul class="inspector inspectorcontent">
         <li class="inspectoritem">
             <span>
