@@ -10,20 +10,19 @@ namespace BVNetwork.ContentInspector
     [Authorize]
     public class ContentInspectorController : Controller
     {
-        private readonly IContentInspectorService _ContentInspectorService;
-        public ContentInspectorController(IContentInspectorService ContentInspectorService)
+        private readonly IContentInspectorService _contentInspectorService;
+        public ContentInspectorController(IContentInspectorService contentInspectorService)
         {
-            _ContentInspectorService = ContentInspectorService;
+            _contentInspectorService = contentInspectorService;
         }
 
         public ActionResult Index(string id)
-        {
-            
+        {         
             if (!PrincipalInfo.HasEditAccess)
             {
                 throw new SecurityException("Access denied");
             }
-            var model = _ContentInspectorService.CreateModel(new ContentReference(id), null, null, 0, new List<ContentReference>());
+            var model = _contentInspectorService.CreateModel(new ContentReference(id), null, null, 0, new List<ContentReference>());
             return View(Paths.ToResource(this.GetType(),
                 "Views/ContentInspector/Index.ascx"), model);
         }
