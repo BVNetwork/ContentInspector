@@ -7,22 +7,27 @@
 var previousContentGroup = "";
 foreach (var item in Model)
 { %>
-        <li class="inspector_area">
-            <div class="inspector_property">[Content area]<i> <%: item.Name%></i> <text> value:</text></div>
-            <div class="inspector_content_area">
-                <div>
-                    
-                   <% foreach (var subItem in item.ContentAreaItems)
-                    { %>
-                
-                       <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorContent.ascx"), subItem, new ViewDataDictionary{{"group",previousContentGroup}});%> 
-                       <% {
-                            previousContentGroup = subItem.ContentGroup;
-                        } 
-                    }%>
-                        
-
-                </div>
-            </div>
-        </li>
-<%} %>
+<li class="inspector_area">
+    <div class="inspector_property">
+        [Content area]<i> <%: item.Name%></i>
+        <text> value:</text>
+    </div>
+    <div class="inspector_content_area">
+        <div>
+            <% for (int i = 0; i < item.ContentAreaItems.Count(); i++)
+                       {%>
+            <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorContent.ascx"), item.ContentAreaItems[i], new ViewDataDictionary{{"group",previousContentGroup}});%>
+            <% {  
+                    previousContentGroup = item.ContentAreaItems[i].ContentGroup;
+               }
+               if (item.ContentAreaItems.Count() == i && !string.IsNullOrEmpty(item.ContentAreaItems[i].ContentGroup))
+               {%>
+                    </div>
+            <% } %>
+        <%  } %>
+        </div>
+    </div>
+</li>
+<%
+    previousContentGroup = null;
+} %>
