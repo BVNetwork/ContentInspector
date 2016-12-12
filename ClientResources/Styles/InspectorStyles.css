@@ -61,6 +61,7 @@ li.inspector_main_preview:hover .inspector_preview_button {
     padding-right: 10px;
     max-height: 750px;
     overflow-y: scroll;
+    max-width: 650px;
 }
 
 .inspector_green {

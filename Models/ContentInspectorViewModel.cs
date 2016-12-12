@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using EPiServer.Core;
+using EPiServer.Core.Html.StringParsing;
 
 namespace EPiCode.ContentInspector.Models
 {
-    public class ContentInspectorViewModel
+    public class ContentInspectorViewModel : IXhtmlStringItem
     {
         public InspectorContentViewModel Content { get; set; }
         public List<string> VisitorGroupsNames { get; set; }
         public string ContentGroup { get; set; }
         public List<ContentAreaItemViewModel> ContentAreaItems { get; set; }
         public List<ContentReferenceViewModel> ContentReferenceItems { get; set; }
+        public List<ContentInspectorViewModel.XhtmlStringViewModel> XhtmlStringItems { get; set; }
 
         public class InspectorContentViewModel
         {
@@ -41,7 +43,25 @@ namespace EPiCode.ContentInspector.Models
             public string Name { get; set; }
             public ContentInspectorViewModel ContentReferenceItem { get; set; }
         }
+        public class XhtmlStringViewModel
+        {
+            public XhtmlStringViewModel()
+            {
+                Fragments = new List<IXhtmlStringItem>();
+            }
+
+            public string Name { get; set; }
+            public List<IXhtmlStringItem> Fragments { get; set; }
+        }
+
+        public class XhtmlStringContent : IXhtmlStringItem
+        {
+            public string Value { get; set; }
+        }
     }
 
+    public interface IXhtmlStringItem
+    {
 
+    }
 }

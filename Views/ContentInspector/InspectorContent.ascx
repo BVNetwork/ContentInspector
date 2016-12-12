@@ -9,7 +9,7 @@ if (!string.IsNullOrEmpty(previousContentGroup) && string.IsNullOrEmpty(Model.Co
 %>
         </div>
 <%} 
-if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) || (!string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) && Model.ContentGroup != previousContentGroup ) )
+if ((string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) || (!string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.ContentGroup) && Model.ContentGroup != previousContentGroup )) || (Model.VisitorGroupsNames != null && Model.VisitorGroupsNames.Any() && string.IsNullOrEmpty(Model.ContentGroup) ) )
 {
 %>
 
@@ -21,7 +21,7 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
         <li class="inspectoritem">
             <span>
                 <ul>
-                    <% if (!string.IsNullOrEmpty(Model.ContentGroup))
+                    <% if (!string.IsNullOrEmpty(Model.ContentGroup) || (Model.VisitorGroupsNames != null && Model.VisitorGroupsNames.Any())  )
                     {%>
                     <li class="inspector_green">
                         <i>
@@ -96,4 +96,10 @@ if (string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.Co
         </li>
         <% } %>
         <%    } %>
+         <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorXhtmlString.ascx"), Model.XhtmlStringItems); %> 
     </ul>
+    
+    <% if ((Model.VisitorGroupsNames != null && Model.VisitorGroupsNames.Any() && string.IsNullOrEmpty(Model.ContentGroup)))
+       {%>
+        </div>   
+      <% } %>

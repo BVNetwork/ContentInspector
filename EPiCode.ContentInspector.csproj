@@ -198,6 +198,7 @@
     </None>
     <None Include="Views\ContentInspector\Index.cshtml" />
     <Content Include="Views\ContentInspector\Index.ascx" />
+    <Content Include="Views\ContentInspector\InspectorXhtmlString.ascx" />
     <Content Include="Views\ContentInspector\InspectorStatus.ascx" />
     <Content Include="Views\ContentInspector\InspectorContent.ascx" />
     <Content Include="Views\ContentInspector\InspectorContentArea.ascx" />

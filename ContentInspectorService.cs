@@ -7,7 +7,9 @@ using System.Reflection;
 using EPiCode.ContentInspector.Models;
 using EPiServer;
 using EPiServer.Cms.Shell;
+using EPiServer.Cms.Shell.UI.Editor.TinyMCE.Plugins;
 using EPiServer.Core;
+using EPiServer.Core.Html.StringParsing;
 using EPiServer.DataAbstraction;
 using EPiServer.Editor;
 using EPiServer.Personalization.VisitorGroups;
@@ -60,12 +62,12 @@ namespace EPiCode.ContentInspector
                 VisitorGroupsNames = visitorGroupNames,
                 ContentAreaItems = new List<ContentInspectorViewModel.ContentAreaItemViewModel>(),
                 ContentGroup = contentGroup,
-                ContentReferenceItems = new List<ContentInspectorViewModel.ContentReferenceViewModel>()
+                ContentReferenceItems = new List<ContentInspectorViewModel.ContentReferenceViewModel>(),
+                XhtmlStringItems = new List<ContentInspectorViewModel.XhtmlStringViewModel>()
             };
 
             var contentType = ServiceLocator.Current.GetInstance<IContentTypeRepository>().Load(content.ContentTypeID);
 
-            // Get content area properties
             if (level >= _maxLevel)
             {
                 model.Content.IsMaxLevel = true;
@@ -80,22 +82,24 @@ namespace EPiCode.ContentInspector
                 if (propertyInfo.PropertyType == typeof(ContentReference) ||
                     propertyInfo.PropertyType == typeof(PageReference))
                 {
-                    var contentReferenceProperty = content.Property[propertyInfo.Name] as PropertyContentReference;
-                    var contentReferenceSubItem = contentReferenceProperty?.Value as ContentReference;
-                    if (contentReferenceSubItem != null)
+                    GetContentReferenceProperty(level, parentIds, content, propertyInfo, model);
+                }
+                else if (propertyInfo.PropertyType == typeof(XhtmlString))
+                {
+                    var property = content.Property[propertyInfo.Name] as PropertyXhtmlString;
+                    var fragments = property?.XhtmlString?.Fragments;
+                    var xhtmlStringViewModel = new ContentInspectorViewModel.XhtmlStringViewModel();
+                    xhtmlStringViewModel.Name = property.TranslateDisplayName();
+                    //xhtmlStringViewModel.Fragments = fragments?.ToList();
+                    if (fragments != null)
                     {
-                        if (!model.Content.IsMaxLevel && !model.Content.HasDuplicateParent)
+                        foreach (var fragment in fragments)
                         {
-                            var contentReferenceItem = CreateModel(contentReferenceSubItem, null, null, level,
-                                new List<ContentReference>(parentIds));
-                            var contentReferenceViewModel = new ContentInspectorViewModel.ContentReferenceViewModel()
-                            {
-                                Name = contentReferenceProperty.TranslateDisplayName() ?? propertyInfo.Name,
-                                ContentReferenceItem = contentReferenceItem
-                            };
-                            model.ContentReferenceItems.Add(contentReferenceViewModel);
+                            CreateFragment(level, parentIds, fragment, xhtmlStringViewModel, null);
                         }
                     }
+                    model.XhtmlStringItems.Add(xhtmlStringViewModel);
+
                 }
                 else
                 {
@@ -104,6 +108,59 @@ namespace EPiCode.ContentInspector
                 }
             }
             return model;
+        }
+
+        private void GetContentReferenceProperty(int level, List<ContentReference> parentIds, IContent content, PropertyInfo propertyInfo,
+            ContentInspectorViewModel model)
+        {
+            var contentReferenceProperty = content.Property[propertyInfo.Name] as PropertyContentReference;
+            var contentReferenceSubItem = contentReferenceProperty?.Value as ContentReference;
+            if (contentReferenceSubItem != null)
+            {
+                if (!model.Content.IsMaxLevel && !model.Content.HasDuplicateParent)
+                {
+                    var contentReferenceItem = CreateModel(contentReferenceSubItem, null, null, level,
+                        new List<ContentReference>(parentIds));
+                    var contentReferenceViewModel = new ContentInspectorViewModel.ContentReferenceViewModel()
+                    {
+                        Name = contentReferenceProperty.TranslateDisplayName() ?? propertyInfo.Name,
+                        ContentReferenceItem = contentReferenceItem
+                    };
+                    model.ContentReferenceItems.Add(contentReferenceViewModel);
+                }
+            }
+        }
+
+        private void CreateFragment(int level, List<ContentReference> parentIds, IStringFragment fragment,
+            ContentInspectorViewModel.XhtmlStringViewModel xhtmlStringViewModel, List<string> visitorGroups)
+        {
+            if (fragment is PersonalizedContentFragment)
+            {
+                foreach (var personalizedFragment in (fragment as PersonalizedContentFragment).Fragments)
+                {
+                    var internalFormat = fragment.InternalFormat;
+                    visitorGroups = GetVisitorGroupNames(internalFormat);
+                    CreateFragment(level, parentIds, personalizedFragment, xhtmlStringViewModel, visitorGroups);
+                }
+            }
+            else
+            {
+                var contentFragment = fragment as EPiServer.Core.Html.StringParsing.ContentFragment;
+                if (contentFragment != null)
+                {
+                    var contentItemModel = CreateModel(contentFragment.ContentLink,
+                        visitorGroups, contentFragment.ContentGroup, level, new List<ContentReference>(parentIds));
+
+                    xhtmlStringViewModel.Fragments.Add(contentItemModel);
+                }
+                else
+                {
+                    xhtmlStringViewModel.Fragments.Add(new ContentInspectorViewModel.XhtmlStringContent()
+                    {
+                        Value = fragment.GetViewFormat()
+                    });
+                }
+            }
         }
 
         public virtual ContentInspectorViewModel.InspectorContentViewModel CreateInspectorContentViewModel(IContent content)

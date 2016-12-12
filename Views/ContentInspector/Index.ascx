@@ -32,8 +32,12 @@
                         </div>
                     </div>
                 </li>
-           <% }%>
+           <% }%>     
+        
+ 
         <% }%>
+                  
+   <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorXhtmlString.ascx"), Model.XhtmlStringItems); %> 
     </ul>
 </div>
   
