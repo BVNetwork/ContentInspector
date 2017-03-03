@@ -14,8 +14,8 @@
         <summary>Adds a new menu item to content areas which will let you inspect the content, giving you an overview of nested content. Very useful for handling nested blocks.</summary>
         <language>en-US</language>
       <dependencies>
-        <dependency id="EPiServer.CMS.UI.Core" version="[9.0.0, 10.0)" />
-        <dependency id="EPiServer.Framework" version="[9.0.0, 10.0)" />
+        <dependency id="EPiServer.CMS.UI.Core" version="[10.0.0, 11.0)" />
+        <dependency id="EPiServer.Framework" version="[10.0.0, 11.0)" />
       </dependencies>
     </metadata>
     <files>
