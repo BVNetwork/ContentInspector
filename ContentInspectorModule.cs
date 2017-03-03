@@ -13,7 +13,7 @@ using EPiServer.Shell.Modules;
 namespace EPiCode.ContentInspector
 {
 
-    public class ContentInspectorModule : EPiServer.Shell.Modules.ShellModule
+    public class ContentInspectorModule : ShellModule
     {
         public ContentInspectorModule(string name, string routeBasePath, string resourceBasePath)
             : base(name, routeBasePath, resourceBasePath)

@@ -104,7 +104,16 @@ namespace EPiCode.ContentInspector
                 else
                 {
                     var property = content.Property[propertyInfo.Name];
-                    model.Content.AdditionalProperties.Add(property.TranslateDisplayName(), property.Value);
+                    if (property != null)
+                    {
+                        model.Content.AdditionalProperties.Add(property.TranslateDisplayName(), property.Value);
+
+                    }
+                    else
+                    {
+                        model.Content.AdditionalProperties.Add(propertyInfo.Name, propertyInfo.GetValue(content));
+                    }
+                   
                 }
             }
             return model;

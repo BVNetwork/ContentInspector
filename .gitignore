@@ -8,3 +8,4 @@ obj/
 .vs/BVNetwork.ContentAreaInspector/v14/.suo
 bin/
 *.nupkg
+.vs/EPiCode.ContentInspector/v14/.suo
