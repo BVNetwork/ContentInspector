@@ -7,12 +7,12 @@ using System.Reflection;
 using EPiCode.ContentInspector.Models;
 using EPiServer;
 using EPiServer.Cms.Shell;
-using EPiServer.Cms.Shell.UI.Editor.TinyMCE.Plugins;
 using EPiServer.Core;
 using EPiServer.Core.Html.StringParsing;
 using EPiServer.DataAbstraction;
 using EPiServer.Editor;
 using EPiServer.Personalization.VisitorGroups;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.SpecializedProperties;
 
@@ -35,7 +35,12 @@ namespace EPiCode.ContentInspector
             int level, List<ContentReference> parentIds)
         {
             level++;
+           
             var content = _contentLoader.Get<IContent>(contentReference);
+            if (!content.QueryDistinctAccess(AccessLevel.Read))
+            {
+                return null;
+            }
             var currentItem = CreateInspectorContentViewModel(content);
             if (parentIds.Contains(contentReference))
             {
