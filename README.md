@@ -23,3 +23,10 @@ public virtual string Heading { get; set; }
 ![](https://raw.githubusercontent.com/BVNetwork/ContentInspector/master/doc/img/menu.png)
 ![](https://raw.githubusercontent.com/BVNetwork/ContentInspector/master/doc/img/inspect.png)
 
+## Configuration
+
+To set the base url used by rastarization for previewing, you can add the following to appSettings:
+
+``` 
+<add key="ContentInspector.RasterizeBaseUrl" value="/static/css/" />
+``` 
