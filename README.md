@@ -6,10 +6,11 @@ The Content Inspector is an UI addon for Episerver which helps you get a better 
 * A new menu item for content area, allowing you to inspect the selected content
 * Preview of content
 * Simple navigation to nested content.
-* Works with any Icontent type, including commerce items and forms.
-* Displays visitor groups
-* Display additional properties using the Inspect attribute
+* Works with any IContent type, including commerce items and forms.
+* Displays visitor groupings
 * Inspect current content using via the tools menu
+* Display additional properties using the Inspect attribute
+
 
 
 
