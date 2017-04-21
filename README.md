@@ -20,6 +20,9 @@ The Content Inspector is an UI addon for Episerver which helps you get a better 
 public virtual string Heading { get; set; }
 ```
 
+More information at http://world.episerver.com/blogs/Per-Magne-Skuseth/Dates/2017/2/content-inspector/
+
+
 ![](https://raw.githubusercontent.com/BVNetwork/ContentInspector/master/doc/img/menu.png)
 ![](https://raw.githubusercontent.com/BVNetwork/ContentInspector/master/doc/img/inspect.png)
 
