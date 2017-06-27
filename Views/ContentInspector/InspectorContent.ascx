@@ -60,17 +60,27 @@ if ((string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.C
                     <span class="epi-iconObjectPage epi-icon--large inspector_block"></span>
                     <% }%>
                     <li>
-                        <b><%:Model.Content.Name %></b> <a target="_blank" class="epi-visibleLink" href="<%:Model.Content.EditUrl %>">edit </a>
 
+                        
+                        <b><%:Model.Content.Name %></b> 
+                        <%if (Model.Content.EditUrl != null) { %>
+                        <a target="_blank" class="epi-visibleLink" href="<%:Model.Content.EditUrl %>">edit </a>
+                        <% } %>
+                            <%if(Model.Content.PreviewUrl != null) { %>
                         <span data-type="<%:Model.Content.MainType %>" data-previewurl="<%: Model.Content.PreviewUrl%>" class="inspector_preview_button dijitReset dijitInline dijitIcon epi-icon--medium epi-iconPreview"></span>
-                    </li>
+                    <% } %>
+                        </li>
+                      <%if(Model.Content.Type != null) { %>
                     <li>Type: <%:Model.Content.Type %></li>
+                      <% } %>
                     <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorStatus.ascx"), Model.Content);%>
 
-                    <%   foreach (var additionalProperty in Model.Content.AdditionalProperties)
-    {%>
+                    <% 
+                        if(Model.Content.AdditionalProperties != null) { 
+                        foreach (var additionalProperty in Model.Content.AdditionalProperties)
+                        {%>
                     <li><%:additionalProperty.Key %>: <i><%:additionalProperty.Value %></i></li>
-                    <%} %>
+                    <%}} %>
                     <%if (Model.Content.IsMaxLevel)
                     { %>
                     <li><i>Content has sub items, but the inspector will only show 10 sub item levels. Please edit and inspect a sub item to see additional levels</i></li>
@@ -83,7 +93,10 @@ if ((string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.C
             </span>
         </li>
 
-        <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);%>
+        <%if (Model.ContentAreaItems != null)
+                { %>
+        <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector", "Views/ContentInspector/InspectorContentArea.ascx"), Model.ContentAreaItems);
+                }%>
         <%if (Model.ContentReferenceItems != null && Model.ContentReferenceItems.Any())
         {
             foreach (var contentReferenceViewModel in Model.ContentReferenceItems)
@@ -95,8 +108,11 @@ if ((string.IsNullOrEmpty(previousContentGroup) && !string.IsNullOrEmpty(Model.C
             </div>
         </li>
         <% } %>
-        <%    } %>
-         <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector","Views/ContentInspector/InspectorXhtmlString.ascx"), Model.XhtmlStringItems); %> 
+        <%    }
+    if (Model.XhtmlStringItems != null)
+    {%>
+         <% Html.RenderPartial(Paths.ToResource("EPiCode.ContentInspector", "Views/ContentInspector/InspectorXhtmlString.ascx"), Model.XhtmlStringItems);
+    } %> 
     </ul>
     
     <% if ((Model.VisitorGroupsNames != null && Model.VisitorGroupsNames.Any() && string.IsNullOrEmpty(Model.ContentGroup)))

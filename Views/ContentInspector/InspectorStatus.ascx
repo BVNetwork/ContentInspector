@@ -6,19 +6,27 @@
 
 
 <% string cssClass = "";
-               if (Model.Status == VersionStatus.DelayedPublish)
-               {
-                   cssClass = "inspector_scheduled";
-               }
-               else if (Model.Status != VersionStatus.Published)
+    var statusString = "";
+               if (Model.IsDeleted)
                {
                    cssClass = "inspector_not_published epi-iconDanger  epi-icon--colored";
+                   statusString = "Deleted";
                }
-               var statusString = EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + Model.Status.ToString().ToLower());
+               else{
+                    if (Model.Status == VersionStatus.DelayedPublish)
+                    {
+                        cssClass = "inspector_scheduled";
+                    }
+                    else if (Model.Status != VersionStatus.Published)
+                    {
+                        cssClass = "inspector_not_published epi-iconDanger  epi-icon--colored";
+                    }
+                    statusString = EPiServer.Framework.Localization.LocalizationService.Current.GetString("/episerver/cms/versionstatus/" + Model.Status.ToString().ToLower());
+               }
      %>
     <li>Status: 
         <span class="<%:cssClass %>"><%: statusString %></span>
-        <% if ((Model.Status == VersionStatus.Published || Model.Status == VersionStatus.DelayedPublish) && Model.PublishedDate != null)
+        <% if (!Model.IsDeleted && (Model.Status == VersionStatus.Published || Model.Status == VersionStatus.DelayedPublish) && Model.PublishedDate != null)
            { %>
         - 
         <%: Model.PublishedDate %>

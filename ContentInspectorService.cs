@@ -35,8 +35,12 @@ namespace EPiCode.ContentInspector
             int level, List<ContentReference> parentIds)
         {
             level++;
-           
-            var content = _contentLoader.Get<IContent>(contentReference);
+            IContent content;
+            if (!_contentLoader.TryGet(contentReference, out content))
+            {
+                return null;
+            }
+            
             if (!content.QueryDistinctAccess(AccessLevel.Read))
             {
                 return null;
@@ -95,7 +99,6 @@ namespace EPiCode.ContentInspector
                     var fragments = property?.XhtmlString?.Fragments;
                     var xhtmlStringViewModel = new ContentInspectorViewModel.XhtmlStringViewModel();
                     xhtmlStringViewModel.Name = property.TranslateDisplayName();
-                    //xhtmlStringViewModel.Fragments = fragments?.ToList();
                     if (fragments != null)
                     {
                         foreach (var fragment in fragments)
@@ -104,7 +107,6 @@ namespace EPiCode.ContentInspector
                         }
                     }
                     model.XhtmlStringItems.Add(xhtmlStringViewModel);
-
                 }
                 else
                 {
@@ -118,7 +120,6 @@ namespace EPiCode.ContentInspector
                     {
                         model.Content.AdditionalProperties.Add(propertyInfo.Name, propertyInfo.GetValue(content));
                     }
-                   
                 }
             }
             return model;
@@ -159,7 +160,7 @@ namespace EPiCode.ContentInspector
             }
             else
             {
-                var contentFragment = fragment as EPiServer.Core.Html.StringParsing.ContentFragment;
+                var contentFragment = fragment as ContentFragment;
                 if (contentFragment != null)
                 {
                     var contentItemModel = CreateModel(contentFragment.ContentLink,
@@ -183,6 +184,7 @@ namespace EPiCode.ContentInspector
             var currentItem = new ContentInspectorViewModel.InspectorContentViewModel()
             {
                 Name = content.Name,
+                IsDeleted = content.IsDeleted,
                 Id = content.ContentLink.ID.ToString(),
                 Status = versionAble?.Status ?? VersionStatus.Published,
                 Type = content.GetOriginalType().Name,
@@ -230,8 +232,12 @@ namespace EPiCode.ContentInspector
                         var contentAreaItem = contentArea.Items[i];
                         var internalFormat = contentArea.Fragments[i].InternalFormat;
                         var visitorGroups = GetVisitorGroupNames(internalFormat);
-                        contentAreaViewModel.ContentAreaItems.Add(CreateModel(contentAreaItem.ContentLink,
-                            visitorGroups, contentAreaItem.ContentGroup, level, new List<ContentReference>(parentIds)));
+                        var contentAreaItemModel = CreateModel(contentAreaItem.ContentLink,
+                            visitorGroups, contentAreaItem.ContentGroup, level, new List<ContentReference>(parentIds));
+                        if (contentAreaItemModel != null)
+                        {
+                            contentAreaViewModel.ContentAreaItems.Add(contentAreaItemModel);
+                        }
                     }
                     contentAreaItemViewModels.Add(contentAreaViewModel);
                 }

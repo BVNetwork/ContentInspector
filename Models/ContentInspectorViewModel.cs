@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using EPiServer.Core;
-using EPiServer.Core.Html.StringParsing;
 
 namespace EPiCode.ContentInspector.Models
 {
@@ -19,6 +18,7 @@ namespace EPiCode.ContentInspector.Models
             public string PublishedDate { get; set; }
             public string Id { get; set; }
             public VersionStatus Status { get; set; }
+            public bool IsDeleted { get; set; }
             public string Type { get; set; }
             public string EditUrl { get; set; }
             public string PreviewUrl { get; set; }
@@ -27,8 +27,6 @@ namespace EPiCode.ContentInspector.Models
             public bool IsMaxLevel { get; set; }
             public bool HasDuplicateParent { get; set; }
             public Dictionary<string,object> AdditionalProperties { get; set; }
-
-
         }
 
         public class ContentAreaItemViewModel

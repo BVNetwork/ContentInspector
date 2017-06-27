@@ -4,6 +4,7 @@
     {
         Block,
         Image,
-        Page
+        Page,
+        Undefined
     }
 }
