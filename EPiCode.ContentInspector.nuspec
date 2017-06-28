@@ -7,7 +7,7 @@
         <authors>Per Magne Skuseth</authors>
         <owners>Varner Retail</owners>
         <licenseUrl>https://www.coderesort.com/p/epicode/wiki/EpicodeLicense</licenseUrl>
-        <projectUrl>https://github.com/EPiCode/ContentInspector</projectUrl>
+        <projectUrl>https://github.com/bvnetwork/ContentInspector</projectUrl>
         <iconUrl>http://www.coderesort.com/favicon.ico</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Adds a new menu item to content areas which will let you inspect the content, giving you an overview of nested content. Very useful for handling nested blocks.</description>
