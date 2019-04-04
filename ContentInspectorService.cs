@@ -15,6 +15,8 @@ using EPiServer.Personalization.VisitorGroups;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.SpecializedProperties;
+using EPiServer.Web;
+using EPiServer.Web.Routing;
 
 namespace EPiCode.ContentInspector
 {
@@ -23,12 +25,17 @@ namespace EPiCode.ContentInspector
     {
         private readonly int _maxLevel;
         private readonly IContentLoader _contentLoader;
+        private readonly UrlResolver _urlResolver;
+        private readonly TemplateResolver _templateResolver;
 
-        public ContentInspectorService()
+        public ContentInspectorService(IContentLoader contentLoader, UrlResolver urlResolver,
+            TemplateResolver templateResolver)
         {
             var maxLevel = ConfigurationManager.AppSettings["ContentInspector.MaxLevel"];
             _maxLevel = Convert.ToInt32(!string.IsNullOrEmpty(maxLevel) ? maxLevel : "10");
-            _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            _contentLoader = contentLoader;
+            _urlResolver = urlResolver;
+            _templateResolver = templateResolver;
         }
 
         public ContentInspectorViewModel CreateModel(ContentReference contentReference, List<string> visitorGroupNames, string contentGroup,
@@ -188,7 +195,7 @@ namespace EPiCode.ContentInspector
                 Id = content.ContentLink.ID.ToString(),
                 Status = versionAble?.Status ?? VersionStatus.Published,
                 Type = content.GetOriginalType().Name,
-                PreviewUrl = content.PreviewUrl(),
+                PreviewUrl = content.PreviewUrl(_urlResolver, _templateResolver),
                 AdditionalProperties = new Dictionary<string, object>(),
                 PublishedDate = versionAble?.StartPublish?.ToString("g",
                     DateTimeFormatInfo.InvariantInfo)
